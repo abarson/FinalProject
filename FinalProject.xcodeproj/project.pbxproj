@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0DFD12831E9FC902002F6146 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DFD12821E9FC902002F6146 /* main.cpp */; };
+		45D23C6C1EA7C27E00A2D576 /* asteroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D23C6A1EA7C27E00A2D576 /* asteroid.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		0DFD127F1E9FC902002F6146 /* FinalProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FinalProject; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFD12821E9FC902002F6146 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		45D23C6A1EA7C27E00A2D576 /* asteroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asteroid.cpp; sourceTree = "<group>"; };
+		45D23C6B1EA7C27E00A2D576 /* asteroid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = asteroid.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				0DFD12821E9FC902002F6146 /* main.cpp */,
+				45D23C6A1EA7C27E00A2D576 /* asteroid.cpp */,
+				45D23C6B1EA7C27E00A2D576 /* asteroid.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45D23C6C1EA7C27E00A2D576 /* asteroid.cpp in Sources */,
 				0DFD12831E9FC902002F6146 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -248,6 +254,7 @@
 				0DFD12881E9FC902002F6146 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
