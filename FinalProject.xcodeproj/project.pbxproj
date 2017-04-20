@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D95B8B61EA8380D00D1B088 /* GamePiece.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D95B8B41EA8380D00D1B088 /* GamePiece.cpp */; };
 		0D95B8B91EA8391200D1B088 /* Space.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D95B8B71EA8391200D1B088 /* Space.cpp */; };
 		0D95B8BC1EA83CD200D1B088 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D95B8BB1EA83CD100D1B088 /* OpenGL.framework */; };
 		0D95B8BE1EA83CE400D1B088 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D95B8BD1EA83CE400D1B088 /* GLUT.framework */; };
+		0D95B8C31EA84F5500D1B088 /* GamePiece.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D95B8B41EA8380D00D1B088 /* GamePiece.cpp */; };
+		0D95B8C51EA8556A00D1B088 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D95B8BF1EA8461D00D1B088 /* Shape.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,8 @@
 		0D95B8B81EA8391200D1B088 /* Space.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Space.hpp; sourceTree = "<group>"; };
 		0D95B8BB1EA83CD100D1B088 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0D95B8BD1EA83CE400D1B088 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		0D95B8BF1EA8461D00D1B088 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shape.cpp; sourceTree = "<group>"; };
+		0D95B8C01EA8461D00D1B088 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shape.hpp; sourceTree = "<group>"; };
 		0DFD127F1E9FC902002F6146 /* FinalProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FinalProject; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,6 +84,8 @@
 				0D95B8B51EA8380D00D1B088 /* GamePiece.hpp */,
 				0D95B8B71EA8391200D1B088 /* Space.cpp */,
 				0D95B8B81EA8391200D1B088 /* Space.hpp */,
+				0D95B8BF1EA8461D00D1B088 /* Shape.cpp */,
+				0D95B8C01EA8461D00D1B088 /* Shape.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -142,8 +147,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D95B8B61EA8380D00D1B088 /* GamePiece.cpp in Sources */,
+				0D95B8C31EA84F5500D1B088 /* GamePiece.cpp in Sources */,
 				0D95B8B91EA8391200D1B088 /* Space.cpp in Sources */,
+				0D95B8C51EA8556A00D1B088 /* Shape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,47 +12,44 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Shape.hpp"
 using namespace std;
-class Shape{
-    Shape();
-    ~Shape();
-};
-class Point2D{
-    Point2D();
-    ~Point2D();
-};
-
 
 class GamePiece{
 public:
     GamePiece();
     //~GamePiece();
-    virtual void setShape()=0;
+    virtual Shape getShape()=0;
+    virtual void drawShape()=0;
     virtual void move()=0;
     virtual void explode()=0;
-    virtual double getLocation();
+    virtual Point2D getLocation() = 0;
+    virtual void moveTowards() = 0;
     virtual double getDirection();
     virtual bool detectCollision();
+protected:
+    Point2D target;
 private:
     //fields
     double velocity;
-    Shape Shape();
-    Point2D point();
 };
 
 class Bullet: public GamePiece{
 public:
     Bullet();
     //~Bullet();
-    virtual void setShape() override;
+    virtual Shape getShape() override;
+    virtual void drawShape() override;
     virtual void move() override;
     virtual void explode() override;
+    virtual Point2D getLocation() override;
+    virtual void moveTowards() override;
     
 private:
     //fields
     double baseVelocity;
     int lifeTime;
-    
+    //We will need a line object
     
 };
 class Ship: public GamePiece{
@@ -63,9 +60,13 @@ public:
     void rotateR();
     void rotateL();
     void shoot();
-    virtual void setShape() override;
+    virtual Shape getShape() override;
+    virtual void drawShape() override;
     virtual void move() override;
     virtual void explode() override;
+    virtual Point2D getLocation() override;
+    virtual void moveTowards() override;
+    
     
 private:
     //fields
@@ -74,19 +75,23 @@ private:
     int numLives;
     double thrustV;
     double rotationalV;
+    //don't know what shape yet... triangle?
     
 };
 class Asteroid: public GamePiece{
 public:
-    Asteroid();
+    Asteroid(int x, int y);
     //~Asteroid();
-    virtual void setShape() override;
+    virtual Shape getShape() override;
+    virtual void drawShape() override;
     virtual void move() override;
     virtual void explode() override;
+    virtual Point2D getLocation() override;
+    virtual void moveTowards();
     
 private:
     //fields
-    
+    Circle_Coord shape;
 };
 
 

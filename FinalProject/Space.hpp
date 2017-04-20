@@ -10,7 +10,6 @@
 #define Space_hpp
 
 #include <stdio.h>
-#include "GamePiece.hpp"
 
 #include <stdlib.h>
 #ifdef _WIN32
@@ -26,8 +25,6 @@
 #endif
 
 /* Game Functionality */
-vector<Asteroid> asteroids;
-vector<Bullet> bullets;
 
 void moveAllBullets();
 

@@ -7,15 +7,21 @@
 //
 
 #include "Space.hpp"
+#include "GamePiece.hpp"
 
 GLdouble width, height;
 int wd;
 
+Asteroid ast1(0, 0);
+Asteroid ast2(400, 600);
+Asteroid ast3(0, 500);
 int mouse_x, mouse_y = 0;
 
 void init() {
-    width = 600;
+    width = 400;
     height = 600;
+    
+    
 }
 
 /* Initialize OpenGL Graphics */
@@ -42,6 +48,11 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    ast1.drawShape();
+    ast2.drawShape();
+    ast3.drawShape();
+    glFlush();
 }
 
 // http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
@@ -99,6 +110,9 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int extra) {
+    ast1.moveTowards();
+    ast2.moveTowards();
+    ast3.moveTowards();
     glutTimerFunc(30, timer, 0);
     glutPostRedisplay();
 }
