@@ -12,15 +12,33 @@
 GLdouble width, height;
 int wd;
 
-Asteroid ast1(0, 0);
-Asteroid ast2(400, 600);
-Asteroid ast3(0, 500);
+vector<Asteroid> asteroids;
+
 int mouse_x, mouse_y = 0;
 
+void drawAllAsteroids(){
+    for (int i = 0; i < asteroids.size(); ++i){
+        asteroids[i].drawShape();
+    }
+}
+
+void moveAllAsteroids(){
+    for (int i = 0; i < asteroids.size(); ++i){
+        asteroids[i].moveTowards();
+    }
+}
+
 void init() {
-    width = 400;
+    width = 600;
     height = 600;
-    
+    Asteroid ast1(0, 0);
+    Asteroid ast2(600, 200);
+    Asteroid ast3(0, 600);
+    Asteroid ast4(200, 0);
+    asteroids.push_back(ast1);
+    asteroids.push_back(ast2);
+    asteroids.push_back(ast3);
+    asteroids.push_back(ast4);
     
 }
 
@@ -49,9 +67,7 @@ void display() {
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
-    ast1.drawShape();
-    ast2.drawShape();
-    ast3.drawShape();
+    drawAllAsteroids();
     glFlush();
 }
 
@@ -110,9 +126,7 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int extra) {
-    ast1.moveTowards();
-    ast2.moveTowards();
-    ast3.moveTowards();
+    moveAllAsteroids();
     glutTimerFunc(30, timer, 0);
     glutPostRedisplay();
 }

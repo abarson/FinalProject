@@ -82,31 +82,31 @@ void Circle::calc_area_peri() {
 Point2D::Point2D() : x(0), y(0) {
 }
 
-Point2D::Point2D(int x_in, int y_in) : x(x_in), y(y_in) {
+Point2D::Point2D(double x_in, double y_in) : x(x_in), y(y_in) {
 }
 
-int Point2D::get_x() const {
+double Point2D::get_x() const {
     return x;
 }
 
-int Point2D::get_y() const {
+double Point2D::get_y() const {
     return y;
 }
 
-void Point2D::set_x(int x_in) {
+void Point2D::set_x(double x_in) {
     x = x_in;
 }
 
-void Point2D::set_y(int y_in) {
+void Point2D::set_y(double y_in) {
     y = y_in;
 }
 
-void Point2D::set_point(int x_in, int y_in) {
+void Point2D::set_point(double x_in, double y_in) {
     x = x_in;
     y = y_in;
 }
 
-void Point2D::move_point(int x_offset, int y_offset) {
+void Point2D::move_point(double x_offset, double y_offset) {
     x += x_offset;
     y += y_offset;
 }
@@ -131,7 +131,7 @@ void Circle_Coord::set_center(Point2D center_in) {
     center = center_in;
 }
 
-void Circle_Coord::set_center(int x_in, int y_in) {
+void Circle_Coord::set_center(double x_in, double y_in) {
     center = Point2D(x_in, y_in);
 }
 
@@ -139,7 +139,7 @@ void Circle_Coord::set_outside_color(double r, double g, double b) {
     outside = {r, g, b};
 }
 
-double Point2D::distance_between(int x1, int y1, int x2, int y2){
+double Point2D::distance_between(double x1, double y1, double x2, double y2){
     return sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2));
 }
 
@@ -147,13 +147,13 @@ bool Circle_Coord::is_overlapping(const Circle_Coord &c) const{
     return (Point2D::distance_between(get_center_x(), get_center_y(), c.get_center_x(), c.get_center_y()) <= radius + c.get_radius());
 }
 
-bool Circle_Coord::is_overlapping(int x_in, int y_in) const{
+bool Circle_Coord::is_overlapping(double x_in, double y_in) const{
     Circle_Coord temp;
     temp.set_center(x_in, y_in);
     return is_overlapping(temp);
 }
 
-bool Circle_Coord::is_overlapping(int x_in1, int y_in1, int x_in2, int y_in2) const{
+bool Circle_Coord::is_overlapping(double x_in1, double y_in1, double x_in2, double y_in2) const{
     // the center y is in between y_in1 and y_in2
     if (x_in1 == x_in2 && ((get_center_y() > y_in2) == (get_center_y() < y_in1) &&
                            (x_in1 >= get_center_x() - radius) && x_in1 <= get_center_x() + radius)){

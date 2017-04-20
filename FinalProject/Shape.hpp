@@ -70,22 +70,22 @@ private:
 class Point2D {
 public:
     Point2D();
-    Point2D(int x_in, int y_in);
+    Point2D(double x_in, double y_in);
     
-    int get_x() const;
-    int get_y() const;
+    double get_x() const;
+    double get_y() const;
     
-    void set_x(int x_in);
-    void set_y(int y_in);
-    void set_point(int x_in, int y_in);
+    void set_x(double x_in);
+    void set_y(double y_in);
+    void set_point(double x_in, double y_in);
     
-    void move_point(int x_offset, int y_offset);
+    void move_point(double x_offset, double y_offset);
     
-    static double distance_between(int x1, int y1, int x2, int y2);
+    static double distance_between(double x1, double y1, double x2, double y2);
     
 private:
-    int x;
-    int y;
+    double x;
+    double y;
 };
 
 class Circle_Coord : public Circle {
@@ -97,17 +97,17 @@ public:
     int get_center_y() const;
     
     void set_center(Point2D center_in);
-    void set_center(int x_in, int y_in);
+    void set_center(double x_in, double y_in);
     
     virtual void set_outside_color(double r, double g, double b);
     
     virtual void draw() const override;
     
-    bool is_overlapping(int x_in, int y_in) const;
+    bool is_overlapping(double x_in, double y_in) const;
     
     bool is_overlapping(const Circle_Coord &c) const;
     
-    bool is_overlapping(int x_in1, int y_in1, int x_in2, int y_in2) const;
+    bool is_overlapping(double x_in1, double y_in1, double x_in2, double y_in2) const;
     
 private:
     Point2D center;

@@ -26,6 +26,8 @@
 
 /* Game Functionality */
 
+void drawAllAsteroids();
+
 void moveAllBullets();
 
 void moveAllAsteroids();

@@ -27,8 +27,11 @@ public:
     virtual void moveTowards() = 0;
     virtual double getDirection();
     virtual bool detectCollision();
+    virtual void setVelocity(double vIn);
+    virtual double getVelocity() const;
 protected:
     Point2D target;
+    Point2D origin;
 private:
     //fields
     double velocity;
@@ -92,6 +95,8 @@ public:
 private:
     //fields
     Circle_Coord shape;
+    Point2D direction;
+    
 };
 
 
