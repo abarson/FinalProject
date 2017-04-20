@@ -1,13 +1,14 @@
 //
-//  asteroid.hpp
+//  GamePiece.hpp
 //  FinalProject
 //
-//  Created by Eli Gitelman on 4/19/17.
+//  Created by Adam Barson on 4/19/17.
 //  Copyright © 2017 Adam Barson. All rights reserved.
 //
 
-#ifndef asteroid_hpp
-#define asteroid_hpp
+#ifndef GamePiece_hpp
+#define GamePiece_hpp
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,41 +24,41 @@ class Point2D{
 
 
 class GamePiece{
+public:
     GamePiece();
-    ~GamePiece();
-    
+    //~GamePiece();
     virtual void setShape()=0;
     virtual void move()=0;
     virtual void explode()=0;
     virtual double getLocation();
     virtual double getDirection();
     virtual bool detectCollision();
-    
-    
+private:
     //fields
     double velocity;
     Shape Shape();
     Point2D point();
-    
-    
 };
 
 class Bullet: public GamePiece{
+public:
     Bullet();
-    ~Bullet();
+    //~Bullet();
     virtual void setShape() override;
     virtual void move() override;
     virtual void explode() override;
     
+private:
     //fields
     double baseVelocity;
     int lifeTime;
-
+    
     
 };
 class Ship: public GamePiece{
+public:
     Ship();
-    ~Ship();
+    //~Ship();
     void regenerate();
     void rotateR();
     void rotateL();
@@ -66,6 +67,7 @@ class Ship: public GamePiece{
     virtual void move() override;
     virtual void explode() override;
     
+private:
     //fields
     static double terminalV;
     static double friction;
@@ -75,36 +77,17 @@ class Ship: public GamePiece{
     
 };
 class Asteroid: public GamePiece{
+public:
     Asteroid();
-    ~Asteroid();
+    //~Asteroid();
     virtual void setShape() override;
     virtual void move() override;
     virtual void explode() override;
     
+private:
     //fields
-
     
 };
-class Space{
-    Space();
-    ~Space();
-    void getAsteroid();
-    void getShip();
-    void getBullet();
-    void nextLevel();
-    void pause();
-    void openMenu();
-    void highScore();
-    
-    
-    vector<Asteroid> asteroids;
-    vector<Bullet> bullets;
 
 
-};
-
-
-
-#include <stdio.h>
-
-#endif /* asteroid_hpp */
+#endif /* GamePiece_hpp */
