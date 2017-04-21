@@ -25,7 +25,7 @@ bool GamePiece::detectCollision(){
 }
 
 void GamePiece::setVelocity(double vIn){
-    if (velocity > 0){
+    if (vIn > 0){
         velocity = vIn;
     }
     else {
@@ -37,42 +37,56 @@ double GamePiece::getVelocity() const{
     return velocity;
 }
 
-Asteroid::Asteroid(int x, int y): GamePiece(){
-    double r = rand() % 100;
-    int buffer_x = 0;
-    int buffer_y = 0;
-    setVelocity(r);
-    cout << r << endl;
+Asteroid::Asteroid(): GamePiece(){
     shape = Circle_Coord();
-    shape.set_radius(20);
-    shape.set_center(x, y);
-    origin.set_x(x);
-    origin.set_y(y);
-    if (x > 0){
-        buffer_x = -20;
-    }
-    else{
-        buffer_x = 20;
-    }
-    
-    if (y > 0){
-        buffer_y = -20;
-    }
-    else{
-        buffer_y = 20;
-    }
-    target.set_x(600 + buffer_x - x);
-    target.set_y(600 + buffer_y - y);
-    shape.set_outside_color(1, 0, 0);
-    shape.set_color(0, 1, 1);
-    
+    initFields();
+
     double x_dir = target.get_x() - getLocation().get_x();
     double y_dir = target.get_y() - getLocation().get_y();
-    double length = sqrt(pow((x), 2) + pow((y), 2));
+    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
     direction.set_x(x_dir/length);
     direction.set_y(y_dir/length);
 }
 
+void Asteroid::initFields(){
+    double r_velocity = rand() % 8 + 3;
+    double r_size = rand() % 30 + 20;
+    setVelocity(r_velocity);
+    shape.set_radius(r_size);
+    
+    shape.set_outside_color(1, 0, 0);
+    shape.set_color(1, 1, 0);
+    
+    int c = rand() % 4;
+    int x;
+    int y;
+    switch(c){
+        case(0):
+            x = 600;
+            y = rand() % 300 + 200;
+            break;
+        case(1):
+            x = rand() % 300 + 200;
+            y = 600;
+            break;
+        case(2):
+            x = 0;
+            y = rand() % 300 + 200;
+            break;
+        case(3):
+            x = rand() % 300 + 2000;
+            y = 0;
+            break;
+        default:
+            x = 0;
+            y = 0;
+    }
+    cout << c << endl;
+    shape.set_center(x, y);
+    target.set_x(600 - x);
+    target.set_y(600 - y);
+    
+}
 Shape Asteroid::getShape() {
     return shape;
 }
@@ -92,17 +106,22 @@ Point2D Asteroid::getLocation(){
 }
 
 void Asteroid::moveTowards(){
-    
-    double x = target.get_x() - getLocation().get_x();
-    double y = target.get_y() - getLocation().get_y();
-    cout << x << endl;
-    cout << y << endl;
-    if ((x > 2.5 || x < -2.5) && (y > 2.5 || y < -2.5)){
-        double length = sqrt(pow((x), 2) + pow((y), 2));
-        shape.set_center(getLocation().get_x() + (x/length) * 5, getLocation().get_y() + (y/length) * 5);
+    if ((getLocation().get_x() > -20 && getLocation().get_x() < 620 && getLocation().get_y() > -20 && getLocation().get_y() < 620)){
+        shape.set_center(getLocation().get_x() + (direction.get_x()) * getVelocity(), getLocation().get_y() + (direction.get_y()) * getVelocity());
     }
     else{
-        shape.set_center(600 - getLocation().get_x(), 600 - getLocation().get_y());
+        if (getLocation().get_x() < 0){
+            shape.set_center(600, getLocation().get_y());
+        }
+        else if (getLocation().get_x() > 600){
+            shape.set_center(0, getLocation().get_y());
+        }
+        else if (getLocation().get_y() < 0){
+            shape.set_center(getLocation().get_x(), 600);
+        }
+        else{
+            shape.set_center(getLocation().get_x(), 0);
+        }
     }
     
 }

@@ -31,14 +31,9 @@ void moveAllAsteroids(){
 void init() {
     width = 600;
     height = 600;
-    Asteroid ast1(0, 0);
-    Asteroid ast2(600, 200);
-    Asteroid ast3(0, 600);
-    Asteroid ast4(200, 0);
-    asteroids.push_back(ast1);
-    asteroids.push_back(ast2);
-    asteroids.push_back(ast3);
-    asteroids.push_back(ast4);
+    for (int i = 0; i < 15; ++i){
+        asteroids.push_back(Asteroid());
+    }
     
 }
 

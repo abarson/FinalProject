@@ -83,14 +83,16 @@ private:
 };
 class Asteroid: public GamePiece{
 public:
-    Asteroid(int x, int y);
+    Asteroid();
     //~Asteroid();
+    void initFields();
     virtual Shape getShape() override;
     virtual void drawShape() override;
     virtual void move() override;
     virtual void explode() override;
     virtual Point2D getLocation() override;
-    virtual void moveTowards();
+    virtual void moveTowards() override;
+    
     
 private:
     //fields
