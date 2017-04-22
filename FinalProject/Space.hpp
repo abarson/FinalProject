@@ -26,19 +26,47 @@
 
 /* Game Functionality */
 
+/**
+ * Requires: nothing
+ * Modifies: the GUI display
+ * Effects: add initial Asteroids to screen
+ */
 void drawAllAsteroids();
 
+/**
+ * Requires: nothing
+ * Modifies: all the Bullets in Space
+ * Effects: move all of the Bullets in Space
+ */
 void moveAllBullets();
 
+/**
+ * Requires: nothing
+ * Modifies: all the Asteroids in Space
+ * Effects: move all of the Asteroids in Space
+ */
 void moveAllAsteroids();
 
+/**
+ * Requires: all Asteroids of current level have been destroyed
+ * Modifies: Space
+ * Effects: prepare to generate Asteroids for next level
+ */
 void nextLevel();
 
+/**
+ * Requires: nothing
+ * Modifies: game state of Space
+ * Effects: pause/unpause the game
+ */
 void pause();
 
+/**
+ * Requires: nothing
+ * Modifies: game state of Space
+ * Effects: open/close meny
+ */
 void openMenu();
-
-void highScore();
 
 /* Game Functionality */
 

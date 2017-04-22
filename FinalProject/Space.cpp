@@ -8,14 +8,48 @@
 
 #include "Space.hpp"
 #include "GamePiece.hpp"
-
+#include <iostream>
+#include <fstream>
 GLdouble width, height;
 int wd;
 
 vector<Asteroid> asteroids;
 
+Ship ship;
 int mouse_x, mouse_y = 0;
 
+int counter = 0;
+
+int start_ast;
+
+ofstream write_discovered;
+void start(){
+    ifstream in_file("save_state.txt");
+    if (in_file){
+        cout << "Would you like to load your previous game state? (y/n)" << endl;
+        string user_input;
+        while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
+            cin.clear();
+            string junk;
+            getline(cin, junk);
+            cout << "Enter a y/n. " << endl;
+        }
+        if (user_input == "y"){
+            in_file >> start_ast;
+            write_discovered.open("save_state.txt");
+        } else{
+            start_ast = 1;
+            write_discovered.open("save_state.txt");
+        }
+    } else {
+        write_discovered.open("save_state.txt");
+        //write_discovered("save_state.txt");
+        cout << "No save file found. Making one for you now... " << endl;
+        start_ast = 1;
+    }
+    
+    //ifstream read_discovered("save_state.txt");
+}
 void drawAllAsteroids(){
     for (int i = 0; i < asteroids.size(); ++i){
         asteroids[i].drawShape();
@@ -29,11 +63,15 @@ void moveAllAsteroids(){
 }
 
 void init() {
+    start();
+    cout << "Number of asteroids to start:" << start_ast << endl;
     width = 600;
     height = 600;
-    for (int i = 0; i < 9; ++i){
+    ship = Ship();
+    for (int i = 0; i < start_ast; ++i){
         asteroids.push_back(Asteroid());
     }
+    
     
 }
 
@@ -62,7 +100,9 @@ void display() {
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
+    ship.drawShape();
     drawAllAsteroids();
+
     glFlush();
 }
 
@@ -71,6 +111,7 @@ void kbd(unsigned char key, int x, int y)
 {
     // escape
     if (key == 27) {
+        write_discovered << asteroids.size();
         glutDestroyWindow(wd);
         exit(0);
     }
@@ -97,6 +138,7 @@ void kbdS(int key, int x, int y) {
             
             break;
         case GLUT_KEY_RIGHT:
+            ship.rotateR();
             break;
         case GLUT_KEY_UP:
             
@@ -122,6 +164,10 @@ void mouse(int button, int state, int x, int y) {
 
 void timer(int extra) {
     moveAllAsteroids();
+    counter++;
+    if (counter % 100 == 0){
+        asteroids.push_back(Asteroid());
+    }
     glutTimerFunc(30, timer, 0);
     glutPostRedisplay();
 }

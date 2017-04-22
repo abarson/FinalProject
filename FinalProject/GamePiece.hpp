@@ -17,78 +17,191 @@ using namespace std;
 
 class GamePiece{
 public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: set instance fields to default values
+     */
     GamePiece();
-    //~GamePiece();
-    virtual Shape getShape()=0;
+    
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: return the shape of the GamePiece
+     */
+    virtual Shape getShape() const=0;
+    
+    /**
+     * Requires: nothing
+     * Modifies: the GUI display
+     * Effects: add the shape to the screen
+     */
     virtual void drawShape()=0;
+    
+    /**
+     * Requires: the GamePiece has intersected with another compatible GamePiece
+     * Modifies: the GUI display
+     * Effects: remove the GamePiece from the screen and generate a small explosion animation
+     */
     virtual void explode()=0;
-    virtual Point2D getLocation() = 0;
+    
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: get the location of the GamePiece
+     */
+    virtual Point2D getLocation() const=0;
+    
+    /**
+     * Requires: nothing
+     * Modifies: the location of the GamePiece
+     * Effects: move the GamePiece towards a target location. If it goes out of the bounds of the screen, move it to the opposite side of the screen, for a continuous flow effect.
+     */
     virtual void move() = 0;
-    virtual double getDirection();
-    virtual bool detectCollision();
+    
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: checks to see if this GamePiece has intersected with another compatible GamePiece
+     */
+    virtual bool detectCollision(GamePiece *piece) const = 0;
+    
+    /**
+     * Requires: vIn >= 1
+     * Modifies: velocity
+     * Effects: sets a new velocity
+     */
     virtual void setVelocity(double vIn);
+    
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: get the velocity of the GamePiece
+     */
     virtual double getVelocity() const;
 protected:
     Point2D target;
     Point2D origin;
 private:
-    //fields
     double velocity;
 };
 
 class Bullet: public GamePiece{
 public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: set direction of Bullet and set instance fields to default values
+     */
     Bullet();
-    //~Bullet();
-    virtual Shape getShape() override;
+    
+    //the shape of the Bullet is a simple line
+    virtual Shape getShape() const override;
+    
     virtual void drawShape() override;
+    
+    //There will be no explosion for the bullet, just removal from the screen
     virtual void explode() override;
-    virtual Point2D getLocation() override;
+    
+    virtual Point2D getLocation() const override;
+    
+    //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
     virtual void move() override;
     
+    virtual bool detectCollision(GamePiece *piece) const override;
+    
 private:
-    //fields
     double baseVelocity;
     int lifeTime;
     //We will need a line object
-    
 };
 class Ship: public GamePiece{
 public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: set instance fields to default values
+     */
     Ship();
-    //~Ship();
+    
+    /**
+     * Requires: the Ship has been destroyed
+     * Modifies: the GUI display
+     * Effects: respawn the ship in the middle of the screen
+     */
     void regenerate();
+    
+    /**
+     * Requires: nothing
+     * Modifies: the direction of the Ship
+     * Effects: rotate the Ship to the right
+     */
     void rotateR();
+    
+    /**
+     * Requires: nothing
+     * Modifies: the direction of the Ship
+     * Effects: rotate the Ship to the left
+     */
     void rotateL();
+    
+    /**
+     * Requires: nothing
+     * Modifies: the GUI display
+     * Effects: shoot a Bullet from the tip of the Ship
+     */
     void shoot();
-    virtual Shape getShape() override;
+    
+    //Triangle shape
+    virtual Shape getShape() const override;
+    
     virtual void drawShape() override;
+    
     virtual void explode() override;
-    virtual Point2D getLocation() override;
+    
+    virtual Point2D getLocation() const override;
+    
+    //movement will be based on user input
     virtual void move() override;
     
+    //collision detection will be detected with Asteroids
+    virtual bool detectCollision(GamePiece *piece) const override;
     
 private:
-    //fields
-    static double terminalV;
-    static double friction;
+    Triangle_Coord shape;
     int numLives;
     double thrustV;
     double rotationalV;
-    //don't know what shape yet... triangle?
     
 };
 class Asteroid: public GamePiece{
 public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: randomize size, start location, and target location of the Asteroid
+     */
     Asteroid();
-    //~Asteroid();
+    
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: used in constructor to help make code neater, initializes all instance fields
+     */
     void initFields();
-    virtual Shape getShape() override;
+    
+    //Circle shape
+    virtual Shape getShape() const override;
+    
     virtual void drawShape() override;
+    
     virtual void explode() override;
-    virtual Point2D getLocation() override;
+    
+    virtual Point2D getLocation() const override;
+    
     virtual void move() override;
     
+    virtual bool detectCollision(GamePiece *piece) const override;
     
 private:
     //fields

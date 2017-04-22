@@ -13,7 +13,6 @@
 #include <iostream>
 using namespace std;
 
-
 struct color {
     double red;
     double green;
@@ -47,6 +46,7 @@ protected:
     virtual void calc_area_peri() = 0;
     color fill;
 };
+
 
 class Circle : public Shape {
 public:
@@ -87,6 +87,31 @@ private:
     double x;
     double y;
 };
+
+class Triangle_Coord : public Shape {
+public:
+    Triangle_Coord();
+    Triangle_Coord(Point2D tIn);
+    Triangle_Coord(double tip_x, double tip_y);
+    Triangle_Coord(double tip_x, double tip_y, color c);
+    
+    Point2D get_tip() const;
+    void set_tip(Point2D tIn);
+    
+    double get_angle() const;
+    void set_angle(double aIn);
+    
+    virtual void draw() const override;
+protected:
+    Point2D tip;
+    Point2D bottom_right;
+    Point2D bottom_left;
+    double angle;
+private:
+    virtual void calc_area_peri() override;
+};
+
+
 
 class Circle_Coord : public Circle {
 public:

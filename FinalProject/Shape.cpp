@@ -79,6 +79,49 @@ void Circle::calc_area_peri() {
     perimeter = 2.0 * M_PI * radius;
 }
 
+Triangle_Coord::Triangle_Coord(){
+    set_tip(Point2D(0, 0));
+    angle = 0;
+}
+Triangle_Coord::Triangle_Coord(double tip_x, double tip_y){
+    set_tip(Point2D(tip_x, tip_y));
+    angle = 0;
+}
+Triangle_Coord::Triangle_Coord(double tip_x, double tip_y, color c) : Shape(c){
+    set_tip(Point2D(tip_x, tip_y));
+    angle = 0;
+}
+    
+Point2D Triangle_Coord::get_tip() const{
+    return tip;
+}
+
+void Triangle_Coord::set_tip(Point2D tIn){
+    tip = tIn;
+}
+
+double Triangle_Coord::get_angle() const{
+    return angle;
+}
+
+void Triangle_Coord::set_angle(double aIn){
+    angle = aIn;
+}
+void Triangle_Coord::calc_area_peri(){
+    //irrelevant
+}
+
+void Triangle_Coord::draw() const {
+    glBegin(GL_TRIANGLES);
+    //set fill color
+    glColor3f(fill.red, fill.green, fill.blue);
+    //draw center point
+    glVertex2f(get_tip().get_x(), get_tip().get_y());
+    glVertex2f(get_tip().get_x() - 10, get_tip().get_y() + 30);
+    glVertex2f(get_tip().get_x() + 10, get_tip().get_y() + 30);
+    glEnd(); //End triangle coordinates
+}
+
 Point2D::Point2D() : x(0), y(0) {
 }
 
@@ -171,13 +214,13 @@ void Circle_Coord::draw() const {
     // set fill color
     glColor3f(fill.red, fill.green, fill.blue);
     // draw center point
-    glVertex2i(get_center_x(), get_center_y());
+    glVertex2f(get_center_x(), get_center_y());
     // set outside color
     glColor3f(outside.red, outside.green, outside.blue);
     
     // draw outside points
     for (int i = 0; i <= 360; ++i) {
-        glVertex2i(get_center_x() + radius * cos(i * M_PI / 180.0), get_center_y() + radius * sin(i * M_PI / 180.0));
+        glVertex2f(get_center_x() + radius * cos(i * M_PI / 180.0), get_center_y() + radius * sin(i * M_PI / 180.0));
     }
     glEnd();
 }

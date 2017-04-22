@@ -16,16 +16,6 @@ GamePiece::GamePiece(){
     origin = Point2D();
 }
 
-
-double GamePiece::getDirection(){
-    return 0;
-}
-
-bool GamePiece::detectCollision(){
-    return false;
-    
-}
-
 void GamePiece::setVelocity(double vIn){
     if (vIn > 0){
         velocity = vIn;
@@ -39,15 +29,50 @@ double GamePiece::getVelocity() const{
     return velocity;
 }
 
+
+Ship::Ship(){
+    shape = Triangle_Coord(300, 300);
+    shape.set_color(1, 1, 0);
+    numLives = 3;
+    thrustV = 0;
+    rotationalV = 0;
+}
+
+void Ship::regenerate(){
+    //not implemented
+}
+void Ship::rotateR(){
+    shape.set_angle(shape.get_angle() + 1);
+}
+void Ship::rotateL(){
+    //not implemented
+}
+void Ship::shoot(){
+    //not implemented
+}
+Shape Ship::getShape() const {
+    return shape;
+}
+void Ship::drawShape() {
+    shape.draw();
+}
+void Ship::explode() {
+    //not implemented
+}
+Point2D Ship::getLocation() const{
+    return shape.get_tip();
+}
+void Ship::move() {
+    //not implemented
+}
+bool Ship::detectCollision(GamePiece *piece) const {
+    //not implemented
+    return false;
+}
+
 Asteroid::Asteroid(): GamePiece(){
     shape = Circle_Coord();
     initFields();
-
-    double x_dir = target.get_x() - getLocation().get_x();
-    double y_dir = target.get_y() - getLocation().get_y();
-    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
-    direction.set_x(x_dir/length);
-    direction.set_y(y_dir/length);
 }
 
 void Asteroid::initFields(){
@@ -62,6 +87,8 @@ void Asteroid::initFields(){
     int c = rand() % 4;
     int x;
     int y;
+    
+    //there are four different cases for spawning the Asteroid, one for each side of the screen
     switch(c){
         case(0):
             x = 600;
@@ -84,11 +111,19 @@ void Asteroid::initFields(){
             y = 0;
     }
     shape.set_center(x, y);
+    
+    //set the target to be the opposite side of the screen of the Asteroid
     target.set_x(600 - x);
     target.set_y(600 - y);
     
+    double x_dir = target.get_x() - getLocation().get_x();
+    double y_dir = target.get_y() - getLocation().get_y();
+    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
+    direction.set_x(x_dir/length);
+    direction.set_y(y_dir/length);
+    
 }
-Shape Asteroid::getShape() {
+Shape Asteroid::getShape() const{
     return shape;
 }
 
@@ -97,10 +132,10 @@ void Asteroid::drawShape(){
 }
 
 void Asteroid::explode(){
-    
+    //not implemented
 }
 
-Point2D Asteroid::getLocation(){
+Point2D Asteroid::getLocation() const{
     return shape.get_center();
 }
 
@@ -124,3 +159,10 @@ void Asteroid::move(){
     }
     
 }
+
+bool Asteroid::detectCollision(GamePiece *piece) const{
+    return false;
+}
+
+
+
