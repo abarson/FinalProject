@@ -7,6 +7,7 @@
 //
 
 #include "GamePiece.hpp"
+#include "Space.hpp"
 #include <stdlib.h>
 using namespace std;
 GamePiece::GamePiece(){
@@ -22,6 +23,7 @@ double GamePiece::getDirection(){
 
 bool GamePiece::detectCollision(){
     return false;
+    
 }
 
 void GamePiece::setVelocity(double vIn){
@@ -54,8 +56,8 @@ void Asteroid::initFields(){
     setVelocity(r_velocity);
     shape.set_radius(r_size);
     
-    shape.set_outside_color(1, 0, 0);
-    shape.set_color(1, 1, 0);
+    shape.set_outside_color(100.0/255, 100.0/255, 100.0/255);
+    shape.set_color(150.0/255, 150.0/255, 150.0/255);
     
     int c = rand() % 4;
     int x;
@@ -74,14 +76,13 @@ void Asteroid::initFields(){
             y = rand() % 300 + 200;
             break;
         case(3):
-            x = rand() % 300 + 2000;
+            x = rand() % 300 + 200;
             y = 0;
             break;
         default:
             x = 0;
             y = 0;
     }
-    cout << c << endl;
     shape.set_center(x, y);
     target.set_x(600 - x);
     target.set_y(600 - y);
@@ -94,9 +95,7 @@ Shape Asteroid::getShape() {
 void Asteroid::drawShape(){
     shape.draw();
 }
-void Asteroid::move(){
-    
-}
+
 void Asteroid::explode(){
     
 }
@@ -105,7 +104,7 @@ Point2D Asteroid::getLocation(){
     return shape.get_center();
 }
 
-void Asteroid::moveTowards(){
+void Asteroid::move(){
     if ((getLocation().get_x() > -20 && getLocation().get_x() < 620 && getLocation().get_y() > -20 && getLocation().get_y() < 620)){
         shape.set_center(getLocation().get_x() + (direction.get_x()) * getVelocity(), getLocation().get_y() + (direction.get_y()) * getVelocity());
     }

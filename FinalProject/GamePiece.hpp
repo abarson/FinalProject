@@ -21,10 +21,9 @@ public:
     //~GamePiece();
     virtual Shape getShape()=0;
     virtual void drawShape()=0;
-    virtual void move()=0;
     virtual void explode()=0;
     virtual Point2D getLocation() = 0;
-    virtual void moveTowards() = 0;
+    virtual void move() = 0;
     virtual double getDirection();
     virtual bool detectCollision();
     virtual void setVelocity(double vIn);
@@ -43,10 +42,9 @@ public:
     //~Bullet();
     virtual Shape getShape() override;
     virtual void drawShape() override;
-    virtual void move() override;
     virtual void explode() override;
     virtual Point2D getLocation() override;
-    virtual void moveTowards() override;
+    virtual void move() override;
     
 private:
     //fields
@@ -65,10 +63,9 @@ public:
     void shoot();
     virtual Shape getShape() override;
     virtual void drawShape() override;
-    virtual void move() override;
     virtual void explode() override;
     virtual Point2D getLocation() override;
-    virtual void moveTowards() override;
+    virtual void move() override;
     
     
 private:
@@ -88,10 +85,9 @@ public:
     void initFields();
     virtual Shape getShape() override;
     virtual void drawShape() override;
-    virtual void move() override;
     virtual void explode() override;
     virtual Point2D getLocation() override;
-    virtual void moveTowards() override;
+    virtual void move() override;
     
     
 private:

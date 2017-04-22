@@ -24,14 +24,14 @@ void drawAllAsteroids(){
 
 void moveAllAsteroids(){
     for (int i = 0; i < asteroids.size(); ++i){
-        asteroids[i].moveTowards();
+        asteroids[i].move();
     }
 }
 
 void init() {
     width = 600;
     height = 600;
-    for (int i = 0; i < 15; ++i){
+    for (int i = 0; i < 9; ++i){
         asteroids.push_back(Asteroid());
     }
     

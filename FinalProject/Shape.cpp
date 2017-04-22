@@ -174,6 +174,7 @@ void Circle_Coord::draw() const {
     glVertex2i(get_center_x(), get_center_y());
     // set outside color
     glColor3f(outside.red, outside.green, outside.blue);
+    
     // draw outside points
     for (int i = 0; i <= 360; ++i) {
         glVertex2i(get_center_x() + radius * cos(i * M_PI / 180.0), get_center_y() + radius * sin(i * M_PI / 180.0));
