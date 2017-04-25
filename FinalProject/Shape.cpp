@@ -70,56 +70,13 @@ void Circle::set_radius(double r) {
 }
 
 // This method is to be completed.
-void Circle::draw() const {
+void Circle::draw() {
     cout << "Drawing a circle" << endl;
 }
 
 void Circle::calc_area_peri() {
     area = M_PI * radius * radius;
     perimeter = 2.0 * M_PI * radius;
-}
-
-Triangle_Coord::Triangle_Coord(){
-    set_tip(Point2D(0, 0));
-    angle = 0;
-}
-Triangle_Coord::Triangle_Coord(double tip_x, double tip_y){
-    set_tip(Point2D(tip_x, tip_y));
-    angle = 0;
-}
-Triangle_Coord::Triangle_Coord(double tip_x, double tip_y, color c) : Shape(c){
-    set_tip(Point2D(tip_x, tip_y));
-    angle = 0;
-}
-    
-Point2D Triangle_Coord::get_tip() const{
-    return tip;
-}
-
-void Triangle_Coord::set_tip(Point2D tIn){
-    tip = tIn;
-}
-
-double Triangle_Coord::get_angle() const{
-    return angle;
-}
-
-void Triangle_Coord::set_angle(double aIn){
-    angle = aIn;
-}
-void Triangle_Coord::calc_area_peri(){
-    //irrelevant
-}
-
-void Triangle_Coord::draw() const {
-    glBegin(GL_TRIANGLES);
-    //set fill color
-    glColor3f(fill.red, fill.green, fill.blue);
-    //draw center point
-    glVertex2f(get_tip().get_x(), get_tip().get_y());
-    glVertex2f(get_tip().get_x() - 10, get_tip().get_y() + 30);
-    glVertex2f(get_tip().get_x() + 10, get_tip().get_y() + 30);
-    glEnd(); //End triangle coordinates
 }
 
 Point2D::Point2D() : x(0), y(0) {
@@ -153,6 +110,119 @@ void Point2D::move_point(double x_offset, double y_offset) {
     x += x_offset;
     y += y_offset;
 }
+
+
+Triangle_Coord::Triangle_Coord(): Shape(){
+    set_center(Point2D(0, 0));
+    angle = 0;
+}
+Triangle_Coord::Triangle_Coord(double center_x, double center_y): Shape(){
+    set_center(Point2D(center_x, center_y));
+    tip = Point2D(center_x, center_y - 10);
+    bottom_left = Point2D(center_x - 10, center_y + 20);
+    bottom_right = Point2D(center_x + 10, center_y + 20);
+    angle = 0;
+}
+Triangle_Coord::Triangle_Coord(double center_x, double center_y, color c) : Shape(c){
+    set_center(Point2D(center_x, center_y));
+    angle = 0;
+}
+
+Point2D Triangle_Coord::get_center() const{
+    return center;
+}
+
+void Triangle_Coord::set_center(Point2D cIn){
+    center = cIn;
+}
+
+Point2D Triangle_Coord::get_tip() const{
+    return tip;
+}
+
+void Triangle_Coord::set_tip(Point2D tIn){
+    tip = tIn;
+}
+
+Point2D Triangle_Coord::get_bl() const{
+    return bottom_left;
+}
+
+void Triangle_Coord::set_bl(Point2D blIn){
+    bottom_left = blIn;
+}
+
+Point2D Triangle_Coord::get_br() const{
+    return bottom_right;
+}
+
+void Triangle_Coord::set_br(Point2D brIn){
+    bottom_right = brIn;
+}
+
+double Triangle_Coord::get_angle() const{
+    return angle;
+}
+
+void Triangle_Coord::set_angle(double aIn){
+    angle = aIn;
+}
+void Triangle_Coord::calc_area_peri(){
+    //irrelevant
+}
+
+void Triangle_Coord::updateShape(){
+    double pi = acos(-1);
+    // angle = 180;
+    if (angle > 10){
+        angle = 10;
+    } else if (angle < -10){
+        angle = -10;
+    }
+    double rad = angle / 180 * pi;
+    
+    double rel_tip_x = tip.get_x() - get_center().get_x();
+    double rel_tip_y = tip.get_y() - get_center().get_y();
+    double tip_x = (cos(rad)*(rel_tip_x) - sin(rad)*(rel_tip_y));
+    double tip_y = (sin(rad)*(rel_tip_x) + cos(rad)*(rel_tip_y));
+    tip = Point2D(center.get_x() + tip_x, center.get_y() + tip_y);
+    
+    double rel_bl_x = bottom_left.get_x() - get_center().get_x();
+    double rel_bl_y = bottom_left.get_y() - get_center().get_y();
+    double bl_x = (cos(rad)*(rel_bl_x) - sin(rad)*(rel_bl_y));
+    double bl_y = (sin(rad)*(rel_bl_x) + cos(rad)*(rel_bl_y));
+    bottom_left = Point2D(center.get_x() + bl_x, center.get_y() + bl_y);
+    
+    double rel_br_x = bottom_right.get_x() - get_center().get_x();
+    double rel_br_y = bottom_right.get_y() - get_center().get_y();
+    double br_x = (cos(rad)*(rel_br_x) - sin(rad)*(rel_br_y));
+    double br_y = (sin(rad)*(rel_br_x) + cos(rad)*(rel_br_y));
+    bottom_right = Point2D(center.get_x() + br_x, center.get_y() + br_y);
+    
+    double rel_cen_x = center.get_x() - get_center().get_x();
+    double rel_cen_y = center.get_y() - get_center().get_y();
+    double cen_x = (cos(rad)*(rel_cen_x) - sin(rad)*(rel_cen_y));
+    double cen_y = (sin(rad)*(rel_cen_x) + cos(rad)*(rel_cen_y));
+    center = Point2D(center.get_x() + cen_x, center.get_y() + cen_y);
+}
+
+void Triangle_Coord::updateMove(){
+    double rel_tip_x = tip.get_x() - get_center().get_x();
+    double rel_tip_y = tip.get_y() - get_center().get_y();
+}
+void Triangle_Coord::draw() {
+    glBegin(GL_TRIANGLES);
+    //set fill color
+    glColor3f(fill.red, fill.green, fill.blue);
+    //draw center point
+    
+    glVertex2f(get_tip().get_x(), get_tip().get_y());
+    glVertex2f(bottom_left.get_x(), bottom_left.get_y());
+    glVertex2f(bottom_right.get_x(), bottom_right.get_y());
+    glEnd(); //End triangle coordinates
+}
+
+
 
 Circle_Coord::Circle_Coord() {
     center = Point2D();
@@ -209,7 +279,7 @@ bool Circle_Coord::is_overlapping(double x_in1, double y_in1, double x_in2, doub
     return false;
 }
 
-void Circle_Coord::draw() const {
+void Circle_Coord::draw() {
     glBegin(GL_TRIANGLE_FAN);
     // set fill color
     glColor3f(fill.red, fill.green, fill.blue);

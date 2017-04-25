@@ -135,13 +135,13 @@ void kbdS(int key, int x, int y) {
             
             break;
         case GLUT_KEY_LEFT:
-            
+            ship.rotateL();
             break;
         case GLUT_KEY_RIGHT:
             ship.rotateR();
             break;
         case GLUT_KEY_UP:
-            
+            ship.move();
             break;
     }
     
@@ -168,6 +168,7 @@ void timer(int extra) {
     if (counter % 100 == 0){
         asteroids.push_back(Asteroid());
     }
+    ship.update();
     glutTimerFunc(30, timer, 0);
     glutPostRedisplay();
 }

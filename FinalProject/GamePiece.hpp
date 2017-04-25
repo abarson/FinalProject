@@ -152,6 +152,20 @@ public:
      */
     void shoot();
     
+    void update();
+    
+    int getTurnStag() const;
+    
+    void incrementTurnStag();
+    
+    int getThrustStag() const;
+    
+    void incrementThrustStag();
+    
+    void updateDirection();
+    
+    void keepMoving();
+    
     //Triangle shape
     virtual Shape getShape() const override;
     
@@ -172,6 +186,9 @@ private:
     int numLives;
     double thrustV;
     double rotationalV;
+    int turn_stag;
+    int thrust_stag;
+    Point2D direction;
     
 };
 class Asteroid: public GamePiece{

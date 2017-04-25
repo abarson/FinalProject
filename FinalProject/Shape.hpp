@@ -37,7 +37,7 @@ public:
      * Modifies: nothing (canvas to be drawn on)
      * Effects: draws the shape on the canvas
      */
-    virtual void draw() const = 0;
+    virtual void draw() = 0;
     
 protected:
     double area;
@@ -60,7 +60,7 @@ public:
     void set_radius(double r);
     
     // override draw method from Shape
-    virtual void draw() const override;
+    virtual void draw() override;
 protected:
     double radius;
 private:
@@ -95,14 +95,27 @@ public:
     Triangle_Coord(double tip_x, double tip_y);
     Triangle_Coord(double tip_x, double tip_y, color c);
     
+    Point2D get_center() const;
+    void set_center(Point2D cIn);
+    
     Point2D get_tip() const;
     void set_tip(Point2D tIn);
+    
+    Point2D get_bl() const;
+    void set_bl(Point2D blIn);
+    
+    Point2D get_br() const;
+    void set_br(Point2D brIn);
     
     double get_angle() const;
     void set_angle(double aIn);
     
-    virtual void draw() const override;
+    void updateShape();
+    
+    void updateMove();
+    virtual void draw() override;
 protected:
+    Point2D center;
     Point2D tip;
     Point2D bottom_right;
     Point2D bottom_left;
@@ -126,7 +139,7 @@ public:
     
     virtual void set_outside_color(double r, double g, double b);
     
-    virtual void draw() const override;
+    virtual void draw() override;
     
     bool is_overlapping(double x_in, double y_in) const;
     
