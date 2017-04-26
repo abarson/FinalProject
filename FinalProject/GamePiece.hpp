@@ -15,6 +15,15 @@
 #include "Shape.hpp"
 using namespace std;
 
+
+struct Movement_Info{
+    Point2D direction;
+    int stagnation;
+    double speed;
+};
+
+
+
 class GamePiece{
 public:
     /**
@@ -166,6 +175,8 @@ public:
     
     void keepMoving();
     
+    void updateMoves();
+    
     //Triangle shape
     virtual Shape getShape() const override;
     
@@ -174,6 +185,8 @@ public:
     virtual void explode() override;
     
     virtual Point2D getLocation() const override;
+    
+    void makeAllMoves();
     
     //movement will be based on user input
     virtual void move() override;
@@ -189,6 +202,11 @@ private:
     int turn_stag;
     int thrust_stag;
     Point2D direction;
+    
+    int current_move;
+    vector<Movement_Info> moves;
+    
+    
     
 };
 class Asteroid: public GamePiece{

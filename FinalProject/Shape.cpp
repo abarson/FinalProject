@@ -111,6 +111,11 @@ void Point2D::move_point(double x_offset, double y_offset) {
     y += y_offset;
 }
 
+bool operator == (Point2D &lhs, Point2D &rhs){
+    double difference_x = lhs.get_x() - rhs.get_x();
+    double difference_y = lhs.get_y() - rhs.get_y();
+    return abs(difference_x) < 0.001 && abs(difference_y) < 0.001;
+}
 
 Triangle_Coord::Triangle_Coord(): Shape(){
     set_center(Point2D(0, 0));
@@ -173,12 +178,7 @@ void Triangle_Coord::calc_area_peri(){
 
 void Triangle_Coord::updateShape(){
     double pi = acos(-1);
-    // angle = 180;
-    if (angle > 10){
-        angle = 10;
-    } else if (angle < -10){
-        angle = -10;
-    }
+    
     double rad = angle / 180 * pi;
     
     double rel_tip_x = tip.get_x() - get_center().get_x();
@@ -198,18 +198,26 @@ void Triangle_Coord::updateShape(){
     double br_x = (cos(rad)*(rel_br_x) - sin(rad)*(rel_br_y));
     double br_y = (sin(rad)*(rel_br_x) + cos(rad)*(rel_br_y));
     bottom_right = Point2D(center.get_x() + br_x, center.get_y() + br_y);
-    
-    double rel_cen_x = center.get_x() - get_center().get_x();
-    double rel_cen_y = center.get_y() - get_center().get_y();
-    double cen_x = (cos(rad)*(rel_cen_x) - sin(rad)*(rel_cen_y));
-    double cen_y = (sin(rad)*(rel_cen_x) + cos(rad)*(rel_cen_y));
-    center = Point2D(center.get_x() + cen_x, center.get_y() + cen_y);
 }
 
-void Triangle_Coord::updateMove(){
+Point2D Triangle_Coord::get_rel_tip() const{
     double rel_tip_x = tip.get_x() - get_center().get_x();
     double rel_tip_y = tip.get_y() - get_center().get_y();
+    return Point2D(rel_tip_x, rel_tip_y);
 }
+
+Point2D Triangle_Coord::get_rel_bl() const{
+    double rel_bl_x = bottom_left.get_x() - get_center().get_x();
+    double rel_bl_y = bottom_left.get_y() - get_center().get_y();
+    return Point2D(rel_bl_x, rel_bl_y);
+}
+
+Point2D Triangle_Coord::get_rel_br() const{
+    double rel_br_x = bottom_right.get_x() - get_center().get_x();
+    double rel_br_y = bottom_right.get_y() - get_center().get_y();
+    return Point2D(rel_br_x, rel_br_y);
+}
+
 void Triangle_Coord::draw() {
     glBegin(GL_TRIANGLES);
     //set fill color

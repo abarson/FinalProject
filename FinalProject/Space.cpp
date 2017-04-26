@@ -22,6 +22,8 @@ int counter = 0;
 
 int start_ast;
 
+bool keys[256];
+
 ofstream write_discovered;
 void start(){
     ifstream in_file("save_state.txt");
@@ -102,7 +104,7 @@ void display() {
     
     ship.drawShape();
     drawAllAsteroids();
-
+    
     glFlush();
 }
 
@@ -135,14 +137,53 @@ void kbdS(int key, int x, int y) {
             
             break;
         case GLUT_KEY_LEFT:
-            ship.rotateL();
+            
+            keys[GLUT_KEY_LEFT] = true;
+           // ship.rotateL();
             break;
         case GLUT_KEY_RIGHT:
-            ship.rotateR();
+            keys[GLUT_KEY_RIGHT] = true;
+           // ship.rotateR();
             break;
         case GLUT_KEY_UP:
-            ship.move();
+            keys[GLUT_KEY_UP] = true;
+            //ship.move();
             break;
+            
+    }
+    
+   /* if (keys[GLUT_KEY_LEFT]){
+        ship.rotateL();
+        cout << "left" << endl;
+    }
+    if (keys[GLUT_KEY_RIGHT]){
+        ship.rotateR();
+        cout << "right" << endl;
+    }
+    if (keys[GLUT_KEY_UP]){
+        ship.move();
+        cout << "up" << endl;
+    }*/
+    glutPostRedisplay();
+    
+    return;
+}
+
+void kbdU(int key, int x, int y) {
+    switch(key) {
+        case GLUT_KEY_DOWN:
+            
+            break;
+        case GLUT_KEY_LEFT:
+            keys[GLUT_KEY_LEFT] = false;
+            break;
+        case GLUT_KEY_RIGHT:
+            keys[GLUT_KEY_RIGHT] = false;
+            break;
+        case GLUT_KEY_UP:
+            keys[GLUT_KEY_UP] = false;
+            break;
+            
     }
     
     glutPostRedisplay();
@@ -163,6 +204,18 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int extra) {
+    if (keys[GLUT_KEY_LEFT]){
+        ship.rotateL();
+        //cout << "left" << endl;
+    }
+    if (keys[GLUT_KEY_RIGHT]){
+        ship.rotateR();
+        //cout << "right" << endl;
+    }
+    if (keys[GLUT_KEY_UP]){
+        ship.move();
+        //cout << "up" << endl;
+    }
     moveAllAsteroids();
     counter++;
     if (counter % 100 == 0){
@@ -199,6 +252,10 @@ int main(int argc, char** argv) {
     
     // register special event: function keys, arrows, etc.
     glutSpecialFunc(kbdS);
+    
+    glutSpecialUpFunc(kbdU);
+    
+   // glutIgnoreKeyRepeat(true);
     
     // handles mouse movement
     glutPassiveMotionFunc(cursor);

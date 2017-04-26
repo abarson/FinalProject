@@ -248,6 +248,7 @@
 		0DFD12871E9FC902002F6146 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_CFLAGS = "-Wno-deprecated";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -255,6 +256,7 @@
 		0DFD12881E9FC902002F6146 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_CFLAGS = "-Wno-deprecated";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

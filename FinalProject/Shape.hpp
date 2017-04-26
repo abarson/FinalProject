@@ -83,6 +83,7 @@ public:
     
     static double distance_between(double x1, double y1, double x2, double y2);
     
+    friend bool operator == (Point2D &lhs,  Point2D &rhs);
 private:
     double x;
     double y;
@@ -111,6 +112,10 @@ public:
     void set_angle(double aIn);
     
     void updateShape();
+    
+    Point2D get_rel_tip() const;
+    Point2D get_rel_br() const;
+    Point2D get_rel_bl() const;
     
     void updateMove();
     virtual void draw() override;
