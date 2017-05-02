@@ -176,10 +176,8 @@ void Triangle_Coord::calc_area_peri(){
     //irrelevant
 }
 
-void Triangle_Coord::updateShape(){
-    double pi = acos(-1);
-    
-    double rad = angle / 180 * pi;
+void Triangle_Coord::rotate(int x){
+    double rad = x / 180.0 * PI;
     
     double rel_tip_x = tip.get_x() - get_center().get_x();
     double rel_tip_y = tip.get_y() - get_center().get_y();

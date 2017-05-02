@@ -11,6 +11,8 @@
 
 #include <cmath>
 #include <iostream>
+
+#define PI acos(-1);
 using namespace std;
 
 struct color {
@@ -111,7 +113,7 @@ public:
     double get_angle() const;
     void set_angle(double aIn);
     
-    void updateShape();
+    void rotate(int x);
     
     Point2D get_rel_tip() const;
     Point2D get_rel_br() const;

@@ -13,16 +13,12 @@
 #include <string>
 #include <vector>
 #include "Shape.hpp"
+
+#define MAX_SPEED 12 //max speed that the Ship can move in
+#define BUFFER 20 //the distance from the edge of the screen the Ship or Asteroid can go before being moved to the opposite side of the screen
+#define ROTATION_FORCE 5 //the amount of degrees the Ship rotates
+#define FRICTION 0.95 //the force used to slow down the Ship
 using namespace std;
-
-
-struct Movement_Info{
-    Point2D direction;
-    int stagnation;
-    double speed;
-};
-
-
 
 class GamePiece{
 public:
@@ -73,7 +69,7 @@ public:
      * Modifies: nothing
      * Effects: checks to see if this GamePiece has intersected with another compatible GamePiece
      */
-    virtual bool detectCollision(GamePiece *piece) const = 0;
+    virtual bool detectCollision(GamePiece &piece) const = 0;
     
     /**
      * Requires: vIn >= 1
@@ -117,7 +113,7 @@ public:
     //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
     virtual void move() override;
     
-    virtual bool detectCollision(GamePiece *piece) const override;
+    virtual bool detectCollision(GamePiece &piece) const override;
     
 private:
     double baseVelocity;
@@ -161,21 +157,47 @@ public:
      */
     void shoot();
     
+    /**
+     * Requires: nothing
+     * Modifies: velocity and position of the Ship
+     * Effects: continues to move the Ship and applies friction. Put the ship back in bounds if it goes out of bounds
+     */
     void update();
     
-    int getTurnStag() const;
+    /**
+     * Requires: nothing
+     * Modifies: velocity
+     * Effects: reduce the velocity by the FRICTION rate
+     */
+    void applyFriction();
     
-    void incrementTurnStag();
-    
-    int getThrustStag() const;
-    
-    void incrementThrustStag();
-    
+    /**
+     * Requires: nothing
+     * Modifies: direction
+     * Effects: calculate the direction of the ship as a normalized 2D vector
+     */
     void updateDirection();
     
+    /**
+     * Requires: nothing
+     * Modifies: the location of the Ship
+     * Effects: move the Ship using its velocity
+     */
     void keepMoving();
     
-    void updateMoves();
+    /**
+     * Requires: nothing
+     * Modifies: velocity
+     * Effects: if the speed of the ship is too high, reduce it to fit the restraints of MAX_SPEED
+     */
+    void speedCap();
+    
+    /**
+     * Requires: nothing
+     * Modifies: the location of the Ship
+     * Effects: if the Ship goes of screen, place it on the other side of the screen.
+     */
+    void checkBounds();
     
     //Triangle shape
     virtual Shape getShape() const override;
@@ -186,28 +208,17 @@ public:
     
     virtual Point2D getLocation() const override;
     
-    void makeAllMoves();
-    
-    //movement will be based on user input
+    //movement based on user input
     virtual void move() override;
     
     //collision detection will be detected with Asteroids
-    virtual bool detectCollision(GamePiece *piece) const override;
+    virtual bool detectCollision(GamePiece &piece) const override;
     
 private:
     Triangle_Coord shape;
     int numLives;
-    double thrustV;
-    double rotationalV;
-    int turn_stag;
-    int thrust_stag;
     Point2D direction;
-    
-    int current_move;
-    vector<Movement_Info> moves;
-    
-    
-    
+    Point2D velocity;
 };
 class Asteroid: public GamePiece{
 public:
@@ -236,7 +247,7 @@ public:
     
     virtual void move() override;
     
-    virtual bool detectCollision(GamePiece *piece) const override;
+    virtual bool detectCollision(GamePiece &piece) const override;
     
 private:
     //fields

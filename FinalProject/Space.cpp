@@ -134,38 +134,20 @@ void kbd(unsigned char key, int x, int y)
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_DOWN:
-            
+            //maybe break in the future?
             break;
         case GLUT_KEY_LEFT:
-            
             keys[GLUT_KEY_LEFT] = true;
-           // ship.rotateL();
             break;
         case GLUT_KEY_RIGHT:
             keys[GLUT_KEY_RIGHT] = true;
-           // ship.rotateR();
             break;
         case GLUT_KEY_UP:
             keys[GLUT_KEY_UP] = true;
-            //ship.move();
             break;
             
     }
-    
-   /* if (keys[GLUT_KEY_LEFT]){
-        ship.rotateL();
-        cout << "left" << endl;
-    }
-    if (keys[GLUT_KEY_RIGHT]){
-        ship.rotateR();
-        cout << "right" << endl;
-    }
-    if (keys[GLUT_KEY_UP]){
-        ship.move();
-        cout << "up" << endl;
-    }*/
     glutPostRedisplay();
-    
     return;
 }
 
@@ -206,20 +188,17 @@ void mouse(int button, int state, int x, int y) {
 void timer(int extra) {
     if (keys[GLUT_KEY_LEFT]){
         ship.rotateL();
-        //cout << "left" << endl;
     }
     if (keys[GLUT_KEY_RIGHT]){
         ship.rotateR();
-        //cout << "right" << endl;
     }
     if (keys[GLUT_KEY_UP]){
         ship.move();
-        //cout << "up" << endl;
     }
     moveAllAsteroids();
     counter++;
-    if (counter % 100 == 0){
-        asteroids.push_back(Asteroid());
+    if (counter % 100 == 0 && asteroids.size() < 5){
+       asteroids.push_back(Asteroid());
     }
     ship.update();
     glutTimerFunc(30, timer, 0);
