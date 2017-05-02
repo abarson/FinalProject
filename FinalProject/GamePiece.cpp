@@ -51,6 +51,13 @@ void Ship::shoot(){
     //not implemented
 }
 
+Point2D Ship::getDirection() const{
+    double x_dir = shape.get_tip().get_x() - shape.get_center().get_x();
+    double y_dir = shape.get_tip().get_y() - shape.get_center().get_y();
+    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
+    return Point2D(x_dir/length, y_dir/length);
+}
+
 void Ship::update(){
     keepMoving();
     applyFriction();
@@ -74,11 +81,8 @@ void Ship::applyFriction(){
 }
 
 void Ship::updateDirection(){
-    double x_dir = shape.get_tip().get_x() - shape.get_center().get_x();
-    double y_dir = shape.get_tip().get_y() - shape.get_center().get_y();
-    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
-    direction.set_x(x_dir/length);
-    direction.set_y((y_dir/length));
+    direction.set_x(getDirection().get_x());
+    direction.set_y(getDirection().get_y());
 }
 
 void Ship::keepMoving(){

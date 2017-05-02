@@ -159,6 +159,13 @@ public:
     
     /**
      * Requires: nothing
+     * Modifies: nothing
+     * Effects: get the current direction of the Ship
+     */
+    Point2D getDirection() const;
+    
+    /**
+     * Requires: nothing
      * Modifies: velocity and position of the Ship
      * Effects: continues to move the Ship and applies friction. Put the ship back in bounds if it goes out of bounds
      */

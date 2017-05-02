@@ -10,7 +10,9 @@
 #include "GamePiece.hpp"
 #include <iostream>
 #include <fstream>
-GLdouble width, height;
+
+GLdouble screen_width, screen_height;
+
 int wd;
 
 vector<Asteroid> asteroids;
@@ -67,8 +69,8 @@ void moveAllAsteroids(){
 void init() {
     start();
     cout << "Number of asteroids to start:" << start_ast << endl;
-    width = 600;
-    height = 600;
+    screen_width = 600;
+    screen_height = 600;
     ship = Ship();
     for (int i = 0; i < start_ast; ++i){
         asteroids.push_back(Asteroid());
@@ -88,13 +90,13 @@ void initGL() {
  whenever the window needs to be re-painted. */
 void display() {
     // tell OpenGL to use the whole window for drawing
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, screen_width, screen_height);
     
     // do an orthographic parallel projection with the coordinate
     // system set to first quadrant, limited by screen/window size
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0.0, width, height, 0.0, -1.f, 1.f);
+    glOrtho(0.0, screen_width, screen_height, 0.0, -1.f, 1.f);
     
     
     
@@ -214,7 +216,7 @@ int main(int argc, char** argv) {
     
     glutInitDisplayMode(GLUT_RGBA);
     
-    glutInitWindowSize((int)width, (int)height);
+    glutInitWindowSize((int)screen_width, (int)screen_height);
     glutInitWindowPosition(100, 100); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
     wd = glutCreateWindow("Graphics!" /* title */ );
