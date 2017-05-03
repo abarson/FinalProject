@@ -238,6 +238,7 @@ Circle_Coord::Circle_Coord(double rIn): Circle(rIn) {
     center = Point2D();
 }
 
+
 Point2D Circle_Coord::get_center() const {
     return center;
 }

@@ -48,7 +48,13 @@ void Ship::rotateL(){
     shape.rotate(-ROTATION_FORCE);
 }
 void Ship::shoot(){
+    cout << "shoot"<<endl;
+    
     //not implemented
+    // call a bullet polygon each time the space bar is pressed
+    // center that bullet polygon at the tip vertex of the ship
+    // have it faced in (get direction)
+    // move at a constant velocity in direction
 }
 
 Point2D Ship::getDirection() const{
@@ -260,6 +266,38 @@ void Asteroid::move(){
 bool Asteroid::detectCollision(GamePiece &piece) const{
     return false;
 }
+  
+Bullet::Bullet(Ship ship){
+    bullet_shape=Circle_Coord(1);
+    bullet_shape.set_center(ship.getDirection().get_x(), ship.getDirection().get_y());
+    bullet_shape.set_color(1, 0, 0);
 
+
+    int lifeTime = 10;
+}
+Shape Bullet::getShape() const {
+    return bullet_shape;
+}
+void Bullet::drawShape() {
+    bullet_shape.draw();
+}
+void Bullet::explode() {
+    //not implemented
+}
+Point2D Bullet::getLocation() const{
+    return Point2D();
+}
+void Bullet::move() {
+    
+    Point2D blocate=ship.getDirection();
+    baseVelocity.set_x(blocate.get_x() + blocate.get_x());
+    baseVelocity.set_y(blocate.get_y() + blocate.get_y());
+    
+    
+}
+bool Bullet::detectCollision(GamePiece &piece) const {
+    //not implemented
+    return false;
+}
 
 

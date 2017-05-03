@@ -91,35 +91,6 @@ private:
     double velocity;
 };
 
-class Bullet: public GamePiece{
-public:
-    /**
-     * Requires: nothing
-     * Modifies: instance fields
-     * Effects: set direction of Bullet and set instance fields to default values
-     */
-    Bullet();
-    
-    //the shape of the Bullet is a simple line
-    virtual Shape getShape() const override;
-    
-    virtual void drawShape() override;
-    
-    //There will be no explosion for the bullet, just removal from the screen
-    virtual void explode() override;
-    
-    virtual Point2D getLocation() const override;
-    
-    //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
-    virtual void move() override;
-    
-    virtual bool detectCollision(GamePiece &piece) const override;
-    
-private:
-    double baseVelocity;
-    int lifeTime;
-    //We will need a line object
-};
 class Ship: public GamePiece{
 public:
     /**
@@ -262,6 +233,39 @@ private:
     Point2D direction;
     
 };
+class Bullet: public GamePiece{
+public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: set direction of Bullet and set instance fields to default values
+     */
+    Bullet(Ship ship);
+    
+    //the shape of the Bullet is a simple line
+    virtual Shape getShape() const override;
+    
+    virtual void drawShape() override;
+    
+    //There will be no explosion for the bullet, just removal from the screen
+    virtual void explode() override;
+    
+    virtual Point2D getLocation() const override;
+    
+    //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
+    virtual void move() override;
+    
+    virtual bool detectCollision(GamePiece &piece) const override;
+    
+private:
+    Point2D baseVelocity;
+    Point2D bdirection;
+    int lifeTime;
+    Circle_Coord bullet_shape;
+    Ship ship;
+    //We will need a line object
+};
+
 
 
 #endif /* GamePiece_hpp */
