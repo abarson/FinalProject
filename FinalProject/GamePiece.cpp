@@ -160,6 +160,8 @@ void Ship::move() {
     velocity.set_y(velocity.get_y() + direction.get_y());
     
     speedCap();
+    
+    spawnThrustFire();
 }
 bool Ship::detectCollision(GamePiece &piece) const {
     //not implemented

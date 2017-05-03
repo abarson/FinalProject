@@ -137,6 +137,8 @@ class Circle_Coord : public Circle {
 public:
     Circle_Coord();
     
+    Circle_Coord(double rIn);
+    
     Point2D get_center() const;
     int get_center_x() const;
     int get_center_y() const;

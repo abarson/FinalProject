@@ -17,6 +17,8 @@ int wd;
 
 vector<Asteroid> asteroids;
 
+vector<Circle_Coord> thrustFire;
+
 Ship ship;
 int mouse_x, mouse_y = 0;
 
@@ -54,6 +56,51 @@ void start(){
     
     //ifstream read_discovered("save_state.txt");
 }
+
+void spawnThrustFire(){
+    Circle_Coord c1(2);
+    c1.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40 - rand() % 8 + 1, ship.getLocation().get_y() -ship.getDirection().get_y() * 40));
+    c1.set_color(1, 0, 0);
+    c1.set_outside_color(1, 0, 0);
+    
+    Circle_Coord c2(2);
+    c2.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40 + rand() % 8 + 1, ship.getLocation().get_y() -ship.getDirection().get_y() * 40));
+    c2.set_color(1, 0, 0);
+    c2.set_outside_color(1, 0, 0);
+    
+    Circle_Coord c3(2);
+    c3.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40, ship.getLocation().get_y() -ship.getDirection().get_y() * 40 + rand() % 8 + 1));
+    c3.set_color(1, 0, 0);
+    c3.set_outside_color(1, 0, 0);
+    
+    Circle_Coord c4(2);
+    c4.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40, ship.getLocation().get_y() -ship.getDirection().get_y() * 40  - rand() % 8 + 1));
+    c4.set_color(1, 0, 0);
+    c1.set_outside_color(1, 0, 0);
+    
+    Circle_Coord c5(2);
+    c5.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40, ship.getLocation().get_y() -ship.getDirection().get_y() * 40));
+    c5.set_color(1, 0, 0);
+    //c5.set_outside_color(1, 0, 0);
+    thrustFire.push_back(c1);
+    thrustFire.push_back(c2);
+    thrustFire.push_back(c3);
+    thrustFire.push_back(c4);
+    thrustFire.push_back(c5);
+    
+}
+
+void reduceThrustFire(){
+    for (int i = 0; i < thrustFire.size(); ++i){
+        thrustFire[i].set_radius(thrustFire[i].get_radius()-0.20);
+        if (thrustFire[i].get_radius() < 0.01){
+            thrustFire[i].set_radius(0);
+            thrustFire.erase(thrustFire.begin() + i);
+            i--;
+        }
+    }
+}
+
 void drawAllAsteroids(){
     for (int i = 0; i < asteroids.size(); ++i){
         asteroids[i].drawShape();
@@ -106,6 +153,10 @@ void display() {
     
     ship.drawShape();
     drawAllAsteroids();
+    
+    for (int i = 0; i < thrustFire.size(); i++){
+        thrustFire[i].draw();
+    }
     
     glFlush();
 }
@@ -196,8 +247,10 @@ void timer(int extra) {
     }
     if (keys[GLUT_KEY_UP]){
         ship.move();
+        spawnThrustFire();
     }
     moveAllAsteroids();
+    reduceThrustFire();
     counter++;
     if (counter % 100 == 0 && asteroids.size() < 5){
        asteroids.push_back(Asteroid());
@@ -219,7 +272,7 @@ int main(int argc, char** argv) {
     glutInitWindowSize((int)screen_width, (int)screen_height);
     glutInitWindowPosition(100, 100); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Graphics!" /* title */ );
+    wd = glutCreateWindow("Asteroids!" /* title */ );
     
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);

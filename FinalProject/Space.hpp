@@ -28,6 +28,8 @@
 
 /* Game Functionality */
 
+void spawnThrustFire();
+
 /**
  * Requires: nothing
  * Modifies: the GUI display
