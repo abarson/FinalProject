@@ -92,6 +92,7 @@ void spawnThrustFire(){
 
 void reduceThrustFire(){
     for (int i = 0; i < thrustFire.size(); ++i){
+        thrustFire[i].set_center(Point2D(thrustFire[i].get_center_x() + rand() % (5 - (-5) + 1) + (-5), thrustFire[i].get_center_y() + rand() % (5 - (-5) + 1) + (-5)));
         thrustFire[i].set_radius(thrustFire[i].get_radius()-0.20);
         if (thrustFire[i].get_radius() < 0.01){
             thrustFire[i].set_radius(0);
