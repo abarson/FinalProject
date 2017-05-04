@@ -194,8 +194,20 @@ void drawBullets(){
 void moveBullets(){
     for(int i=0; i<clip.size();++i){
         clip[i].move();
+        if (clip[i].getLifeTime() > 50){
+            clip.erase(clip.begin() + i);
+            i--;
+        }
     }
 }
+
+void generateBullet(){
+    if (ship.getShotDelay() == 0){
+        clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
+        ship.shoot();
+    }
+}
+
 void init() {
    // test();
     start();
@@ -259,12 +271,7 @@ void kbd(unsigned char key, int x, int y)
         exit(0);
     }
     if (key == 32){
-        if (ship.getShotDelay() == 0){
-        clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
-            ship.shoot();
-        }
-        
-        
+        keys[32] = true;
     }
     
     if (key == 'G') {
@@ -274,6 +281,20 @@ void kbd(unsigned char key, int x, int y)
     if (key == 'R') {
         glColor3f(1.0f, 0.0f, 0.0f);
     }
+    
+    glutPostRedisplay();
+    
+    return;
+}
+
+// http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
+void kbU(unsigned char key, int x, int y)
+{
+    
+    if (key == 32){
+        keys[32] = false;
+    }
+    
     
     glutPostRedisplay();
     
@@ -345,17 +366,19 @@ void play(){
         ship.move();
         spawnThrustFire();
     }
+    if (keys[32]){
+        generateBullet();
+    }
     moveAllAsteroids();
     reduceFire();
+    collisions();
     moveBullets();
     counter++;
     if (counter % 100 == 0 && asteroids.size() < 5){
         asteroids.push_back(Asteroid());
     }
     ship.update();
-    collisions();
 }
-
 void timer(int extra) {
     play();
     
@@ -386,6 +409,8 @@ int main(int argc, char** argv) {
     // register keyboard press event processing function
     // works for numbers, letters, spacebar, etc.
     glutKeyboardFunc(kbd);
+    
+    glutKeyboardUpFunc(kbU);
     
     // register special event: function keys, arrows, etc.
     glutSpecialFunc(kbdS);

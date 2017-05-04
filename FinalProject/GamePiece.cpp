@@ -162,9 +162,6 @@ Triangle_Coord Ship::getTriangle() const{
     return shape;
 }
 
-Shape Ship::getShape() const {
-    return shape;
-}
 void Ship::drawShape() {
     shape.draw();
 }
@@ -191,16 +188,13 @@ Bullet::Bullet(Point2D dIn, Point2D loc): GamePiece(){
     shape = Circle_Coord();
     bdirection = dIn;
     initFields(dIn, loc);
+    lifeTime = 0;
 }
 
 void Bullet::initFields(Point2D dIn, Point2D loc){
-    double r_velocity = 8;
-    double r_size = 4;
-    setVelocity(r_velocity);
-    shape.set_radius(r_size);
-    
+    setVelocity(BULLET_SPEED);
+    shape.set_radius(BULLET_SIZE);
     shape.set_color(1, 0, 0);
-    
     shape.set_center(Point2D(loc.get_x() + dIn.get_x(), loc.get_y() + dIn.get_y()));
     
     
@@ -211,9 +205,10 @@ Circle_Coord Bullet::getCircle() const{
     return shape;
 }
 
-Shape Bullet::getShape() const {
-    return shape;
+int Bullet::getLifeTime() const{
+    return lifeTime;
 }
+
 void Bullet::drawShape() {
     shape.draw();
 }
@@ -221,10 +216,30 @@ void Bullet::explode() {
     //not implemented
 }
 Point2D Bullet::getLocation() const{
-    return Point2D();
+    return shape.get_center();
 }
+
 void Bullet::move() {
-    shape.set_center(shape.get_center().get_x() + (bdirection.get_x())*15, shape.get_center().get_y() + (bdirection.get_y())*15);
+    lifeTime++;
+    if ((shape.get_center().get_x() > -BUFFER && shape.get_center().get_x() < 600 + BUFFER && shape.get_center().get_y() > -BUFFER && shape.get_center().get_y() < 600 + BUFFER)){
+        shape.set_center(shape.get_center().get_x() + (bdirection.get_x())*BULLET_SPEED, shape.get_center().get_y() + (bdirection.get_y())*BULLET_SPEED);
+    }
+    else{
+        if (shape.get_center().get_x() < 0){
+            shape.set_center(600, shape.get_center().get_y());
+        }
+        else if (shape.get_center().get_x() > 600){
+            shape.set_center(0, shape.get_center().get_y());
+        }
+        else if (shape.get_center().get_y() < 0){
+            shape.set_center(shape.get_center().get_x(), 600);
+        }
+        else{
+            shape.set_center(shape.get_center().get_x(), 0);
+        }
+    }
+    
+    
     
 }
 
@@ -284,10 +299,6 @@ void Asteroid::initFields(){
 }
 
 Circle_Coord Asteroid::getCircle() const{
-    return shape;
-}
-
-Shape Asteroid::getShape() const{
     return shape;
 }
 
@@ -397,9 +408,6 @@ void Powerup::initFields(){
     direction.set_x(x_dir/length);
     direction.set_y(y_dir/length);
     
-}
-Shape Powerup::getShape() const{
-    return shape;
 }
 
 void Powerup::drawShape(){

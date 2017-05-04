@@ -18,11 +18,9 @@
 #define BUFFER 20 //the distance from the edge of the screen the Ship or Asteroid can go before being moved to the opposite side of the screen
 #define ROTATION_FORCE 5 //the amount of degrees the Ship rotates
 #define FRICTION 0.95 //the force used to slow down the Ship
-#define SHOT_DELAY 5
-<<<<<<< HEAD
-#define BULLET_SPEED 8
-=======
->>>>>>> origin/master
+#define SHOT_DELAY 8 //the amount of "time" between shots
+#define BULLET_SPEED 15 //the speed of the bullet
+#define BULLET_SIZE 4 //the radius of the bullet
 using namespace std;
 
 class GamePiece{
@@ -33,13 +31,6 @@ public:
      * Effects: set instance fields to default values
      */
     GamePiece();
-    
-    /**
-     * Requires: nothing
-     * Modifies: nothing
-     * Effects: return the shape of the GamePiece
-     */
-    virtual Shape getShape() const=0;
     
     /**
      * Requires: nothing
@@ -186,12 +177,7 @@ public:
     
     int getShotDelay() const;
     
-    
     Triangle_Coord getTriangle() const;
-    
-    
-    //Triangle shape
-    virtual Shape getShape() const override;
     
     virtual void drawShape() override;
     
@@ -222,8 +208,7 @@ public:
     
     Circle_Coord getCircle() const;
     
-    //the shape of the Bullet is a simple line
-    virtual Shape getShape() const override;
+    int getLifeTime() const;
     
     virtual void drawShape() override;
     
@@ -261,9 +246,6 @@ public:
     
     Circle_Coord getCircle() const;
     
-    //Circle shape
-    virtual Shape getShape() const override;
-    
     virtual void drawShape() override;
     
     virtual void explode() override;
@@ -285,7 +267,6 @@ class Powerup: public GamePiece{
 public:
     Powerup();
     void initFields();
-    virtual Shape getShape() const override;
     
     virtual void drawShape() override;
     
