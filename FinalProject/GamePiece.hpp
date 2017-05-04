@@ -173,8 +173,18 @@ public:
      */
     void gunUpdate();
     
+    /**
+     * Requires: nothing
+     * Modifies: shotDelay
+     * Effects: set the shotDelay
+     */
     void setShotDelay(int sIn);
     
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: get the shotDelay
+     */
     int getShotDelay() const;
     
     Triangle_Coord getTriangle() const;
@@ -254,8 +264,18 @@ public:
     
     virtual void move() override;
     
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: check for collision with bullet
+     */
     bool detectCollision(Bullet &bIn) const;
     
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: check for collision with ship
+     */
     bool detectCollision(Ship &sIn) const;
 private:
     //fields

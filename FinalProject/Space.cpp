@@ -35,6 +35,8 @@ bool keys[256];
 
 ofstream write_discovered;
 
+enum type {SHIP, ASTEROID};
+
 //winmm.lib
 //conio.h
 
@@ -60,12 +62,16 @@ void test(){
 }
 */
 
-void explosion(Point2D loc, double size){
+void explosion(Point2D loc, double size, type t){
     for (int i = 0; i < 20 + (int)size; ++i){
         Circle_Coord c(rand() % ((int)size / 6));
+        if (t == SHIP){
+            c.set_outside_color(1, 1, 0);
+            c.set_color(1, 1, 0);
+        } else {
             c.set_outside_color(100.0/255, 100.0/255, 100.0/255);
             c.set_color(150.0/255, 150.0/255, 150.0/255);
-        
+        }
         c.set_center(loc.get_x() + rand() % ((int)size - (-(int)size) + 1) + (-(int)size), loc.get_y() + rand() % ((int)size - (-(int)size) + 1) + (-(int)size));
         explosionFire.push_back(c);
         
@@ -76,7 +82,7 @@ void collisions(){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
             if (asteroids[i].detectCollision(clip[j])){
-                explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius());
+                explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 asteroids.erase(asteroids.begin() + i);
                 clip.erase(clip.begin() + j);
                 i--;
@@ -87,6 +93,8 @@ void collisions(){
     }
     for (int i = 0; i < asteroids.size(); ++i){
          if (asteroids[i].detectCollision(ship)){
+             explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
+             explosion(ship.getLocation(), 30, SHIP);
              asteroids.erase(asteroids.begin() + i);
              i--;
          }
@@ -208,6 +216,20 @@ void generateBullet(){
     }
 }
 
+void animation(){
+    ship.drawShape();
+    drawAllAsteroids();
+    
+    for (int i = 0; i < thrustFire.size(); ++i){
+        thrustFire[i].draw();
+    }
+    
+    for (int i = 0; i < explosionFire.size(); ++i){
+        explosionFire[i].draw();
+    }
+    drawBullets();
+}
+
 void init() {
    // test();
     start();
@@ -246,17 +268,7 @@ void display() {
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
-    ship.drawShape();
-    drawAllAsteroids();
-    
-    for (int i = 0; i < thrustFire.size(); ++i){
-        thrustFire[i].draw();
-    }
-    
-    for (int i = 0; i < explosionFire.size(); ++i){
-        explosionFire[i].draw();
-    }
-    drawBullets();
+    animation();
     
     glFlush();
 }

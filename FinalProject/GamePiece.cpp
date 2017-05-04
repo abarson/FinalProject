@@ -168,6 +168,7 @@ void Ship::drawShape() {
 void Ship::explode() {
     //not implemented
 }
+
 Point2D Ship::getLocation() const{
     return shape.get_tip();
 }
@@ -238,9 +239,6 @@ void Bullet::move() {
             shape.set_center(shape.get_center().get_x(), 0);
         }
     }
-    
-    
-    
 }
 
 Asteroid::Asteroid(): GamePiece(){
@@ -335,9 +333,7 @@ void Asteroid::move(){
 }
 
 bool Asteroid::detectCollision(Bullet &bIn) const{
-   // return shape.is_overlapping(bIn.getCircle());
     if (shape.is_overlapping(bIn.getCircle())){
-        cout << "HIT" << endl;
         return true;
     } else {
         return false;
@@ -349,7 +345,6 @@ bool Asteroid::detectCollision(Ship &sIn) const{
     if (shape.is_overlapping(triangle.get_tip().get_x(), triangle.get_tip().get_y()) ||
             shape.is_overlapping(triangle.get_bl().get_x(), triangle.get_bl().get_y()) ||
         shape.is_overlapping(triangle.get_br().get_x(), triangle.get_br().get_y())){
-        cout << "the ship got hit" << endl;
         return true;
     } else {
         return false;
