@@ -156,6 +156,10 @@ void Ship::gunUpdate(){
     }
 }
 
+int Ship::getNumLives() const{
+    return numLives;
+}
+
 void Ship::setShotDelay(int sIn){
     shotDelay = sIn;
 }
