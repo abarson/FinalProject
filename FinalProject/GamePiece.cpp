@@ -40,7 +40,12 @@ Ship::Ship(){
 }
 
 void Ship::regenerate(){
-    //not implemented
+    shape.set_location(300, 300);
+    direction.set_x(0);
+    direction.set_y(0);
+    velocity.set_x(0);
+    velocity.set_y(0);
+    numLives--;
 }
 void Ship::rotateR(){
     shape.rotate(ROTATION_FORCE);

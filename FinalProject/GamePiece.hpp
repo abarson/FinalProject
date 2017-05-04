@@ -188,6 +188,8 @@ public:
      * Effects: gets shape of ship
      */
     
+    void blink();
+    
     Triangle_Coord getTriangle() const;
     
     virtual void drawShape() override;
