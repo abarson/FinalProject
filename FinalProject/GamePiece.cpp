@@ -64,7 +64,6 @@ void Ship::update(){
     applyFriction();
     checkBounds();
     gunUpdate();
-    cout << "Oh no" << endl;
 }
 
 void Ship::applyFriction(){
@@ -292,7 +291,7 @@ void Asteroid::drawShape(){
 }
 
 void Asteroid::explode(){
-    cout<<"explosions!!!"<<endl;
+    //not implemented
 }
 
 Point2D Asteroid::getLocation() const{
