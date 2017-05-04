@@ -175,6 +175,9 @@ void collisions(){
             }
         }
     }
+    if (PU.detectCollision(ship)){
+        
+    }
 }
 
 
