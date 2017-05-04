@@ -33,6 +33,9 @@ bool keys[256];
 
 ofstream write_discovered;
 
+//winmm.lib
+//conio.h
+
 /*ALCdevice *device;
 
 ALsizei size, freq;
@@ -54,6 +57,22 @@ void test(){
     
 }
 */
+
+void collisions(){
+    for (int i = 0; i < asteroids.size(); ++i){
+        for (int j = 0; j < clip.size(); ++j){
+            if (asteroids[i].detectCollision(clip[j])){
+                asteroids.erase(asteroids.begin() + i);
+                clip.erase(clip.begin() + j);
+                i--;
+                j--;
+            }
+        }
+        if (asteroids[i].detectCollision(ship)){
+            //
+        }
+    }
+}
 void start(){
     ifstream in_file("save_state.txt");
     if (in_file){
@@ -207,8 +226,12 @@ void kbd(unsigned char key, int x, int y)
         exit(0);
     }
     if (key == 32){
-        ship.shoot();
+        if (ship.getShotDelay() == 0){
         clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
+            ship.shoot();
+        }
+        
+        
     }
     
     if (key == 'G') {

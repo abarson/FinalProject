@@ -36,6 +36,7 @@ Ship::Ship(){
     numLives = 3;
     direction = Point2D();
     velocity = Point2D();
+    shotDelay = 0;
 }
 
 void Ship::regenerate(){
@@ -49,6 +50,7 @@ void Ship::rotateL(){
 }
 void Ship::shoot(){
     cout << "shoot"<<endl;
+    shotDelay++;
     
     //not implemented
     // call a bullet polygon each time the space bar is pressed
@@ -68,6 +70,7 @@ void Ship::update(){
     keepMoving();
     applyFriction();
     checkBounds();
+    gunUpdate();
 }
 
 void Ship::applyFriction(){
@@ -144,6 +147,23 @@ void Ship::checkBounds(){
         shape.set_bl(Point2D(shape.get_center().get_x() + rel_bl.get_x(), shape.get_center().get_y() + rel_bl.get_y()));
         shape.set_br(Point2D(shape.get_center().get_x() + rel_br.get_x(), shape.get_center().get_y() + rel_br.get_y()));
     }
+}
+
+void Ship::gunUpdate(){
+    if (shotDelay > 0){
+        shotDelay++;
+    }
+    if (shotDelay > SHOT_DELAY){
+        shotDelay = 0;
+    }
+}
+
+void Ship::setShotDelay(int sIn){
+    shotDelay = sIn;
+}
+
+int Ship::getShotDelay() const{
+    return shotDelay;
 }
 
 Shape Ship::getShape() const {
