@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D3BE8DA1EBA5D6900DBA806 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3BE8D91EBA5D6900DBA806 /* OpenAL.framework */; };
 		0D95B8B91EA8391200D1B088 /* Space.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D95B8B71EA8391200D1B088 /* Space.cpp */; };
 		0D95B8BC1EA83CD200D1B088 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D95B8BB1EA83CD100D1B088 /* OpenGL.framework */; };
 		0D95B8BE1EA83CE400D1B088 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D95B8BD1EA83CE400D1B088 /* GLUT.framework */; };
@@ -27,6 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0D3BE8D91EBA5D6900DBA806 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		0D95B8B41EA8380D00D1B088 /* GamePiece.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GamePiece.cpp; sourceTree = "<group>"; };
 		0D95B8B51EA8380D00D1B088 /* GamePiece.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GamePiece.hpp; sourceTree = "<group>"; };
 		0D95B8B71EA8391200D1B088 /* Space.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Space.cpp; sourceTree = "<group>"; };
@@ -43,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D3BE8DA1EBA5D6900DBA806 /* OpenAL.framework in Frameworks */,
 				0D95B8BE1EA83CE400D1B088 /* GLUT.framework in Frameworks */,
 				0D95B8BC1EA83CD200D1B088 /* OpenGL.framework in Frameworks */,
 			);
@@ -54,6 +57,7 @@
 		0D95B8BA1EA83CD100D1B088 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D3BE8D91EBA5D6900DBA806 /* OpenAL.framework */,
 				0D95B8BD1EA83CE400D1B088 /* GLUT.framework */,
 				0D95B8BB1EA83CD100D1B088 /* OpenGL.framework */,
 			);
