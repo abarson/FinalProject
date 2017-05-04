@@ -339,6 +339,99 @@ bool Asteroid::detectCollision(Ship &sIn) const{
         return false;
     }
 }
+Powerup::Powerup(): GamePiece(){
+    shape = Circle_Coord();
+    initFields();
+}
+
+void Powerup::initFields(){
+    double r_velocity = 5;
+    double r_size = 15;
+    setVelocity(r_velocity);
+    shape.set_radius(r_size);
+    
+    shape.set_color(0, 0, 1);
+    
+    
+    int c = rand() % 4;
+    int x;
+    int y;
+    
+    //there are four different cases for spawning the Asteroid, one for each side of the screen
+    switch(c){
+        case(0):
+            x = 600;
+            y = rand() % 300 + 200;
+            break;
+        case(1):
+            x = rand() % 300 + 200;
+            y = 600;
+            break;
+        case(2):
+            x = 0;
+            y = rand() % 300 + 200;
+            break;
+        case(3):
+            x = rand() % 300 + 200;
+            y = 0;
+            break;
+        default:
+            x = 0;
+            y = 0;
+    }
+    shape.set_center(x, y);
+    
+    //set the target to be the opposite side of the screen of the Powerup
+    
+    target.set_x(600 - x);
+    target.set_y(600 - y);
+    
+    double x_dir = target.get_x() - getLocation().get_x();
+    double y_dir = target.get_y() - getLocation().get_y();
+    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
+    direction.set_x(x_dir/length);
+    direction.set_y(y_dir/length);
+    
+}
+Shape Powerup::getShape() const{
+    return shape;
+}
+
+void Powerup::drawShape(){
+    shape.draw();
+}
+
+void Powerup::explode(){
+    //not implemented
+}
+
+Point2D Powerup::getLocation() const{
+    return shape.get_center();
+}
+
+void Powerup::move(){
+    if ((getLocation().get_x() > -BUFFER && getLocation().get_x() < 600 + BUFFER && getLocation().get_y() > -BUFFER && getLocation().get_y() < 600 + BUFFER)){
+            shape.set_center(getLocation().get_x() + (direction.get_x()) * getVelocity(), getLocation().get_y() + (direction.get_y()) * getVelocity());
+        }
+    else{
+        shape.~Circle_Coord();
+    }
+}
+
+bool Powerup::detectCollision(Ship &sIn) const{
+    Triangle_Coord triangle = sIn.getTriangle();
+    if (shape.is_overlapping(triangle.get_tip().get_x(), triangle.get_tip().get_y()) ||
+        shape.is_overlapping(triangle.get_bl().get_x(), triangle.get_bl().get_y()) ||
+        shape.is_overlapping(triangle.get_br().get_x(), triangle.get_br().get_y())){
+        cout << "the ship got hit" << endl;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
 
 
 

@@ -275,9 +275,9 @@ private:
     Point2D direction;
     
 };
-class PowerUp: public GamePiece{
+class Powerup: public GamePiece{
 public:
-    PowerUp();
+    Powerup();
     void initFields();
     virtual Shape getShape() const override;
     
