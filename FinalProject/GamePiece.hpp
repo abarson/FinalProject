@@ -21,6 +21,7 @@
 #define SHOT_DELAY 8 //the amount of "time" between shots
 #define BULLET_SPEED 15 //the speed of the bullet
 #define BULLET_SIZE 4 //the radius of the bullet
+#define POWER_SPEED 5 // the speed of the powerup
 using namespace std;
 
 class GamePiece{
