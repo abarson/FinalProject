@@ -64,6 +64,7 @@ void Ship::update(){
     applyFriction();
     checkBounds();
     gunUpdate();
+    cout << "Oh no" << endl;
 }
 
 void Ship::applyFriction(){
