@@ -21,7 +21,6 @@ vector<Asteroid> asteroids;
 vector<Circle_Coord> thrustFire;
 
 Ship ship;
-Bullet bullet;
 
 int mouse_x, mouse_y = 0;
 
@@ -146,7 +145,6 @@ void init() {
     screen_width = 600;
     screen_height = 600;
     ship = Ship();
-    bullet=Bullet(ship);
     for (int i = 0; i < start_ast; ++i){
         asteroids.push_back(Asteroid());
     }
@@ -200,7 +198,6 @@ void kbd(unsigned char key, int x, int y)
     }
     if (key == 32){
         ship.shoot();
-        bullet.drawShape();
         
         
     }
