@@ -292,7 +292,7 @@ void Asteroid::drawShape(){
 }
 
 void Asteroid::explode(){
-    //not implemented
+    cout<<"explosions!!!"<<endl;
 }
 
 Point2D Asteroid::getLocation() const{
