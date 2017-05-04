@@ -323,6 +323,7 @@ void play(){
         reduceFire();
         collisions();
         moveBullets();
+        PU.move();
         counter++;
         if (counter % 100 == 0 && asteroids.size() < 5){
             asteroids.push_back(Asteroid());
