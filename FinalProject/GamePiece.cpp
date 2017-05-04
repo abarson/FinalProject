@@ -37,6 +37,7 @@ Ship::Ship(){
     direction = Point2D();
     velocity = Point2D();
     shotDelay = 0;
+    respawnTimer = 0;
 }
 
 void Ship::regenerate(){
@@ -161,6 +162,22 @@ void Ship::setShotDelay(int sIn){
 
 int Ship::getShotDelay() const{
     return shotDelay;
+}
+
+void Ship::setRespawning(int rIn){
+    respawnTimer = rIn;
+}
+
+int Ship::getRespawning() const{
+    return respawnTimer;
+}
+
+void Ship::blink(){
+    if (respawnTimer % 5 == 0){
+        shape.set_color(1, 1, 0);
+    } else {
+        shape.set_color(0, 0, 0);
+    }
 }
 
 Triangle_Coord Ship::getTriangle() const{

@@ -33,6 +33,8 @@ int start_ast;
 
 bool keys[256];
 
+bool respawning = false;
+
 ofstream write_discovered;
 
 enum type {SHIP, ASTEROID};
@@ -120,15 +122,18 @@ void collisions(){
         }
         
     }
-    for (int i = 0; i < asteroids.size(); ++i){
-         if (asteroids[i].detectCollision(ship)){
-             explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
-             explosion(ship.getLocation(), 30, SHIP);
-             ship.regenerate();
-             asteroids.erase(asteroids.begin() + i);
-             i--;
-         }
-     }
+    if (!respawning){
+        for (int i = 0; i < asteroids.size(); ++i){
+            if (asteroids[i].detectCollision(ship)){
+                explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
+                explosion(ship.getLocation(), 30, SHIP);
+                ship.regenerate();
+                respawning = true;
+                asteroids.erase(asteroids.begin() + i);
+                i--;
+            }
+        }
+    }
 }
 
 
@@ -214,9 +219,11 @@ void moveBullets(){
 }
 
 void generateBullet(){
-    if (ship.getShotDelay() == 0){
-        clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
-        ship.shoot();
+    if (!respawning){
+        if (ship.getShotDelay() == 0){
+            clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
+            ship.shoot();
+        }
     }
 }
 
@@ -244,6 +251,7 @@ void init() {
     for (int i = 0; i < start_ast; ++i){
         asteroids.push_back(Asteroid());
     }
+    respawning = true;
 }
 
 
@@ -394,6 +402,15 @@ void play(){
         asteroids.push_back(Asteroid());
     }
     ship.update();
+    
+    if (respawning){
+        ship.setRespawning(ship.getRespawning() + 1);
+        ship.blink();
+        if (ship.getRespawning() == 50){
+            ship.setRespawning(0);
+            respawning = false;
+        }
+    }
 }
 void timer(int extra) {
     play();

@@ -188,6 +188,10 @@ public:
      * Effects: gets shape of ship
      */
     
+    void setRespawning(int rIn);
+    
+    int getRespawning() const;
+    
     void blink();
     
     Triangle_Coord getTriangle() const;
@@ -205,6 +209,7 @@ private:
     Point2D direction;
     Point2D velocity;
     double shotDelay;
+    int respawnTimer;
 };
 
 class Bullet: public GamePiece{
