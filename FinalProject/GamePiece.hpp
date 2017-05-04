@@ -170,6 +170,8 @@ public:
      */
     void gunUpdate();
     
+    int getNumLives() const;
+    
     /**
      * Requires: nothing
      * Modifies: shotDelay

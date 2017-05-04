@@ -45,6 +45,8 @@ ofstream write_discovered;
 
 enum type {SHIP, ASTEROID};
 
+int level;
+
 //winmm.lib
 //conio.h
 
@@ -166,6 +168,7 @@ void collisions(){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
+                cout << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
                 i--;
@@ -282,6 +285,7 @@ void animation(){
 void init() {
    // test();
     start();
+    level = 1;
     screen = menu;
     cout << "Number of asteroids to start:" << start_ast << endl;
     screen_width = 600;
