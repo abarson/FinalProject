@@ -58,6 +58,8 @@ void test(){
 }
 */
 
+
+
 void collisions(){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
@@ -75,9 +77,9 @@ void collisions(){
              asteroids.erase(asteroids.begin() + i);
              i--;
          }
-         
      }
 }
+
 void start(){
     ifstream in_file("save_state.txt");
     if (in_file){
