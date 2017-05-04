@@ -91,7 +91,7 @@ void display_paused(){
     glRasterPos2i(250, 250);
     for (int i = 0; i < pause_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, pause_message[i]);
-    }
+
     
     string resume_message = "'r' to resume";
     glColor3f(1, 1, 1);
@@ -100,6 +100,34 @@ void display_paused(){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, resume_message[i]);
     }
 }
+}
+
+    void start(){
+        ifstream in_file("save_state.txt");
+        if (in_file){
+            cout << "Would you like to load your previous game state? (y/n)" << endl;
+            string user_input;
+            while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
+                cin.clear();
+                string junk;
+                getline(cin, junk);
+                cout << "Enter a y/n. " << endl;
+            }
+            if (user_input == "y"){
+                in_file >> start_ast;
+                write_discovered.open("save_state.txt");
+            } else{
+                start_ast = 1;
+                write_discovered.open("save_state.txt");
+            }
+        } else {
+            write_discovered.open("save_state.txt");
+            //write_discovered("save_state.txt");
+            cout << "No save file found. Making one for you now... " << endl;
+            start_ast = 1;
+            start_ast = 1;
+        }
+    }
 
 void explosion(Point2D loc, double size, type t){
     for (int i = 0; i < 20 + (int)size; ++i){
