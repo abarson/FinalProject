@@ -341,15 +341,9 @@ void play(){
         reduceFire();
         collisions();
         moveBullets();
-<<<<<<< HEAD
-        levelHandler(level);
-=======
         PU.move();
+        levelHandler(level);
         counter++;
-        if (counter % 100 == 0 && asteroids.size() < 5){
-            asteroids.push_back(Asteroid());
-        }
->>>>>>> origin/master
         ship.update();
         
         if (respawning){
