@@ -377,34 +377,10 @@ void Powerup::initFields(){
     
     shape.set_color(0, 0, 1);
     
-    
-    int c = rand() % 4;
-    int x;
-    int y;
-    
-    //there are four different cases for spawning the Asteroid, one for each side of the screen
-    switch(c){
-        case(0):
-            x = 600;
-            y = rand() % 300 + 200;
-            break;
-        case(1):
-            x = rand() % 300 + 200;
-            y = 600;
-            break;
-        case(2):
-            x = 0;
-            y = rand() % 300 + 200;
-            break;
-        case(3):
-            x = rand() % 300 + 200;
-            y = 0;
-            break;
-        default:
-            x = 0;
-            y = 0;
+    int x=600;
+    int y=2;
     }
-    shape.set_center(x, y);
+    shape.set_center(x,y);
     
     //set the target to be the opposite side of the screen of the Powerup
     
@@ -428,11 +404,22 @@ Point2D Powerup::getLocation() const{
 }
 
 void Powerup::move(){
-    if ((getLocation().get_x() > -BUFFER && getLocation().get_x() < 600 + BUFFER && getLocation().get_y() > -BUFFER && getLocation().get_y() < 600 + BUFFER)){
-            shape.set_center(getLocation().get_x() + (direction.get_x()) * getVelocity(), getLocation().get_y() + (direction.get_y()) * getVelocity());
-        }
+    if ((shape.get_center().get_x() > -BUFFER && shape.get_center().get_x() < 600 + BUFFER && shape.get_center().get_y() > -BUFFER && shape.get_center().get_y() < 600 + BUFFER)){
+        shape.set_center(shape.get_center().get_x() + (direction.get_x())*BULLET_SPEED, shape.get_center().get_y() + (direction.get_y())*BULLET_SPEED);
+    }
     else{
-        shape.~Circle_Coord();
+        if (shape.get_center().get_x() < 0){
+            shape.set_center(600, shape.get_center().get_y());
+        }
+        else if (shape.get_center().get_x() > 600){
+            shape.set_center(0, shape.get_center().get_y());
+        }
+        else if (shape.get_center().get_y() < 0){
+            shape.set_center(shape.get_center().get_x(), 600);
+        }
+        else{
+            shape.set_center(shape.get_center().get_x(), 0);
+        }
     }
 }
 

@@ -26,6 +26,7 @@ vector<Circle_Coord> explosionFire;
 
 Ship ship;
 vector<Bullet> clip;
+Powerup PU;
 
 screen_state screen;
 
@@ -275,6 +276,7 @@ void animation(){
         explosionFire[i].draw();
     }
     drawBullets();
+    PU.drawShape();
 }
 
 void init() {
