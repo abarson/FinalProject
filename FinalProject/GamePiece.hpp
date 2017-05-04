@@ -39,13 +39,7 @@ public:
      */
     virtual void drawShape()=0;
     
-    /**
-     * Requires: the GamePiece has intersected with another compatible GamePiece
-     * Modifies: the GUI display
-     * Effects: remove the GamePiece from the screen and generate a small explosion animation
-     */
-    virtual void explode()=0;
-    
+
     /**
      * Requires: nothing
      * Modifies: nothing
@@ -74,9 +68,11 @@ public:
      */
     virtual double getVelocity() const;
 protected:
+    //fields
     Point2D target;
     Point2D origin;
 private:
+    //field
     double velocity;
 };
 
@@ -113,14 +109,14 @@ public:
     /**
      * Requires: nothing
      * Modifies: the GUI display
-     * Effects: shoot a Bullet from the tip of the Ship
+     * Effects: Adds shotdelay to stop spamming
      */
     void shoot();
     
     /**
      * Requires: nothing
      * Modifies: nothing
-     * Effects: get the current direction of the Ship
+     * Effects: get the current direction of the tip of the ship
      */
     Point2D getDirection() const;
     
@@ -169,7 +165,7 @@ public:
     /**
      * Requires: nothing
      * Modifies: shotDelay
-     * Effects: 
+     * Effects: time between shots
      */
     void gunUpdate();
     
@@ -186,19 +182,22 @@ public:
      * Effects: get the shotDelay
      */
     int getShotDelay() const;
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: gets shape of ship
+     */
     
     Triangle_Coord getTriangle() const;
     
     virtual void drawShape() override;
     
-    virtual void explode() override;
-    
     virtual Point2D getLocation() const override;
     
-    //movement based on user input
     virtual void move() override;
     
 private:
+    //fields
     Triangle_Coord shape;
     int numLives;
     Point2D direction;
@@ -209,33 +208,42 @@ private:
 class Bullet: public GamePiece{
 public:
     /**
-     * Requires: nothing
+     * Requires: Point2D for direction and location
      * Modifies: instance fields
      * Effects: set direction of Bullet and set instance fields to default values
      */
     Bullet(Point2D dIn, Point2D loc);
+    /**
+     * Requires: Point2D for direction and location
+     * Modifies: initialization of all fields
+     * Effects: bullet look, size, speed, direction
+     */
     void initFields(Point2D dIn, Point2D loc);
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: get shape of bullet
+     */
     
     Circle_Coord getCircle() const;
+    /**
+     * Requires: nothing
+     * Modifies: bullet's time on board
+     * Effects: nothing
+     */
     
     int getLifeTime() const;
     
     virtual void drawShape() override;
     
-    //There will be no explosion for the bullet, just removal from the screen
-    virtual void explode() override;
-    
-    virtual Point2D getLocation() const override;
-    
-    //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
     virtual void move() override;
     
 private:
+    //fields
     Point2D baseVelocity;
     Point2D bdirection;
     int lifeTime;
     Circle_Coord shape;
-    //We will need a line object
 };
 
 class Asteroid: public GamePiece{
@@ -249,31 +257,34 @@ public:
     
     /**
      * Requires: nothing
-     * Modifies: instance fields
-     * Effects: used in constructor to help make code neater, initializes all instance fields
+     * Modifies: initialization of all fields
+     * Effects: asteroid size, speed, location, direction, color
      */
     void initFields();
+    /**
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: gets shape of asteroid
+     */
     
     Circle_Coord getCircle() const;
     
     virtual void drawShape() override;
-    
-    virtual void explode() override;
     
     virtual Point2D getLocation() const override;
     
     virtual void move() override;
     
     /**
-     * Requires: nothing
-     * Modifies: nothing
-     * Effects: check for collision with bullet
+     * Requires: bullet
+     * Modifies: asteroid if bullet hits it
+     * Effects: checks for collision with bullet
      */
     bool detectCollision(Bullet &bIn) const;
     
     /**
-     * Requires: nothing
-     * Modifies: nothing
+     * Requires: ship
+     * Modifies: asteroid if ship hits it
      * Effects: check for collision with ship
      */
     bool detectCollision(Ship &sIn) const;
@@ -285,20 +296,33 @@ private:
 };
 class Powerup: public GamePiece{
 public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: set instance fields to default values
+     */
     Powerup();
+    /**
+     * Requires: nothing
+     * Modifies: powerup
+     * Effects: changes powerup look, size, speed, direction, and location
+     */
     void initFields();
     
     virtual void drawShape() override;
     
-    virtual void explode() override;
-    
     virtual Point2D getLocation() const override;
     
     virtual void move() override;
-    
+    /**
+     * Requires: ship
+     * Modifies: powerup if ship hits it
+     * Effects: check for collision with ship
+     */
     bool detectCollision(Ship &sIn) const;
     
 private:
+    //fields
     Circle_Coord shape;
     Point2D direction;
 
