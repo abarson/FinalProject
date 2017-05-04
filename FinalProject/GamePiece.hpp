@@ -275,7 +275,28 @@ private:
     Point2D direction;
     
 };
+class PowerUp: public GamePiece{
+public:
+    PowerUp();
+    void initFields();
+    virtual Shape getShape() const override;
+    
+    virtual void drawShape() override;
+    
+    virtual void explode() override;
+    
+    virtual Point2D getLocation() const override;
+    
+    virtual void move() override;
+    
+    bool detectCollision(Ship &sIn) const;
+    
+private:
+    Circle_Coord shape;
+    Point2D direction;
 
+    
+};
 
 
 
