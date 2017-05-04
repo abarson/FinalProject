@@ -236,6 +236,8 @@ public:
     
     int getLifeTime() const;
     
+    virtual Point2D getLocation() const override;
+    
     virtual void drawShape() override;
     
     virtual void move() override;

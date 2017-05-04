@@ -213,6 +213,9 @@ int Bullet::getLifeTime() const{
     return lifeTime;
 }
 
+Point2D Bullet::getLocation() const{
+    return getCircle().get_center();
+}
 void Bullet::drawShape() {
     shape.draw();
 }
