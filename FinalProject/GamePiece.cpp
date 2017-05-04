@@ -194,7 +194,7 @@ Bullet::Bullet(Point2D dIn, Point2D loc): GamePiece(){
 }
 
 void Bullet::initFields(Point2D dIn, Point2D loc){
-    double r_velocity = 5;
+    double r_velocity = 8;
     double r_size = 4;
     setVelocity(r_velocity);
     shape.set_radius(r_size);

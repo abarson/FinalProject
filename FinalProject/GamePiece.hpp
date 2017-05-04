@@ -19,7 +19,10 @@
 #define ROTATION_FORCE 5 //the amount of degrees the Ship rotates
 #define FRICTION 0.95 //the force used to slow down the Ship
 #define SHOT_DELAY 5
+<<<<<<< HEAD
 #define BULLET_SPEED 8
+=======
+>>>>>>> origin/master
 using namespace std;
 
 class GamePiece{
