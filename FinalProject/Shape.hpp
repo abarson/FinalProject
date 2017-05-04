@@ -113,6 +113,8 @@ public:
     double get_angle() const;
     void set_angle(double aIn);
     
+    void set_location(double center_x, double center_y);
+    
     void rotate(int x);
     
     Point2D get_rel_tip() const;

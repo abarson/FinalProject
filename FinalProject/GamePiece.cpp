@@ -40,7 +40,12 @@ Ship::Ship(){
 }
 
 void Ship::regenerate(){
-    //not implemented
+    shape.set_location(300, 300);
+    direction.set_x(0);
+    direction.set_y(0);
+    velocity.set_x(0);
+    velocity.set_y(0);
+    numLives--;
 }
 void Ship::rotateR(){
     shape.rotate(ROTATION_FORCE);
@@ -165,9 +170,7 @@ Triangle_Coord Ship::getTriangle() const{
 void Ship::drawShape() {
     shape.draw();
 }
-void Ship::explode() {
-    //not implemented
-}
+
 
 Point2D Ship::getLocation() const{
     return shape.get_tip();
@@ -210,15 +213,13 @@ int Bullet::getLifeTime() const{
     return lifeTime;
 }
 
+Point2D Bullet::getLocation() const{
+    return getCircle().get_center();
+}
 void Bullet::drawShape() {
     shape.draw();
 }
-void Bullet::explode() {
-    //not implemented
-}
-Point2D Bullet::getLocation() const{
-    return shape.get_center();
-}
+
 
 void Bullet::move() {
     lifeTime++;
@@ -302,10 +303,6 @@ Circle_Coord Asteroid::getCircle() const{
 
 void Asteroid::drawShape(){
     shape.draw();
-}
-
-void Asteroid::explode(){
-    //not implemented
 }
 
 Point2D Asteroid::getLocation() const{
@@ -407,10 +404,6 @@ void Powerup::initFields(){
 
 void Powerup::drawShape(){
     shape.draw();
-}
-
-void Powerup::explode(){
-    //not implemented
 }
 
 Point2D Powerup::getLocation() const{

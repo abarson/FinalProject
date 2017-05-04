@@ -134,39 +134,14 @@ void collisions(){
          if (asteroids[i].detectCollision(ship)){
              explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
              explosion(ship.getLocation(), 30, SHIP);
+             ship.regenerate();
              asteroids.erase(asteroids.begin() + i);
              i--;
          }
      }
 } 
 
-void start(){
-    ifstream in_file("save_state.txt");
-    if (in_file){
-        cout << "Would you like to load your previous game state? (y/n)" << endl;
-        string user_input;
-        while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
-            cin.clear();
-            string junk;
-            getline(cin, junk);
-            cout << "Enter a y/n. " << endl;
-        }
-        if (user_input == "y"){
-            in_file >> start_ast;
-            write_discovered.open("save_state.txt");
-        } else{
-            start_ast = 1;
-            write_discovered.open("save_state.txt");
-        }
-    } else {
-        write_discovered.open("save_state.txt");
-        //write_discovered("save_state.txt");
-        cout << "No save file found. Making one for you now... " << endl;
-        start_ast = 1;
-    }
-    
-    //ifstream read_discovered("save_state.txt");
-}
+
 
 void spawnThrustFire(){
     Circle_Coord c1(2);

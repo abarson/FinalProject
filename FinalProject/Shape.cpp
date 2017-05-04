@@ -122,11 +122,7 @@ Triangle_Coord::Triangle_Coord(): Shape(){
     angle = 0;
 }
 Triangle_Coord::Triangle_Coord(double center_x, double center_y): Shape(){
-    set_center(Point2D(center_x, center_y));
-    tip = Point2D(center_x, center_y - 10);
-    bottom_left = Point2D(center_x - 10, center_y + 20);
-    bottom_right = Point2D(center_x + 10, center_y + 20);
-    angle = 0;
+    set_location(center_x, center_y);
 }
 Triangle_Coord::Triangle_Coord(double center_x, double center_y, color c) : Shape(c){
     set_center(Point2D(center_x, center_y));
@@ -174,6 +170,14 @@ void Triangle_Coord::set_angle(double aIn){
 }
 void Triangle_Coord::calc_area_peri(){
     //irrelevant
+}
+
+void Triangle_Coord::set_location(double center_x, double center_y){
+    set_center(Point2D(center_x, center_y));
+    tip = Point2D(center_x, center_y - 10);
+    bottom_left = Point2D(center_x - 10, center_y + 20);
+    bottom_right = Point2D(center_x + 10, center_y + 20);
+    angle = 0;
 }
 
 void Triangle_Coord::rotate(int x){
