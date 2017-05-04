@@ -91,7 +91,7 @@ void display_paused(){
     glRasterPos2i(250, 250);
     for (int i = 0; i < pause_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, pause_message[i]);
-
+    }
     
     string resume_message = "'r' to resume";
     glColor3f(1, 1, 1);
@@ -99,7 +99,6 @@ void display_paused(){
     for (int i = 0; i < resume_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, resume_message[i]);
     }
-}
 }
 
     void start(){
