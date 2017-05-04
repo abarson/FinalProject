@@ -12,6 +12,8 @@
 #include <fstream>
 //#include <irrklang/irrKlang.h>
 
+enum screen_state {menu, game_play, paused, game_over};
+
 GLdouble screen_width, screen_height;
 
 int wd;
@@ -24,6 +26,9 @@ vector<Circle_Coord> explosionFire;
 
 Ship ship;
 vector<Bullet> clip;
+
+screen_state screen;
+
 
 int mouse_x, mouse_y = 0;
 
@@ -64,34 +69,66 @@ void test(){
 }
 */
 
-
-void start(){
-    ifstream in_file("save_state.txt");
-    if (in_file){
-        cout << "Would you like to load your previous game state? (y/n)" << endl;
-        string user_input;
-        while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
-            cin.clear();
-            string junk;
-            getline(cin, junk);
-            cout << "Enter a y/n. " << endl;
-        }
-        if (user_input == "y"){
-            in_file >> start_ast;
-            write_discovered.open("save_state.txt");
-        } else{
-            start_ast = 1;
-            write_discovered.open("save_state.txt");
-        }
-    } else {
-        write_discovered.open("save_state.txt");
-        //write_discovered("save_state.txt");
-        cout << "No save file found. Making one for you now... " << endl;
-        start_ast = 1;
+void display_menu() {
+    // draw a string message
+    
+    string message = "Click anywhere to begin";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(170, 250);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
+    }
+    string asteroid_message = "Welcome to Asteroid!";
+    glColor3f(1,1,1);
+    glRasterPos2i(180, 150);
+    for (int i = 0; i < asteroid_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, asteroid_message[i]);
     }
     
-    //ifstream read_discovered("save_state.txt");
 }
+
+void display_paused(){
+    string pause_message = "Paused";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(250, 250);
+    for (int i = 0; i < pause_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, pause_message[i]);
+    }
+    
+    string resume_message = "'r' to resume";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(220, 300);
+    for (int i = 0; i < resume_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, resume_message[i]);
+    }
+}
+
+    void start(){
+        ifstream in_file("save_state.txt");
+        if (in_file){
+            cout << "Would you like to load your previous game state? (y/n)" << endl;
+            string user_input;
+            while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
+                cin.clear();
+                string junk;
+                getline(cin, junk);
+                cout << "Enter a y/n. " << endl;
+            }
+            if (user_input == "y"){
+                in_file >> start_ast;
+                write_discovered.open("save_state.txt");
+            } else{
+                start_ast = 1;
+                write_discovered.open("save_state.txt");
+            }
+        } else {
+            write_discovered.open("save_state.txt");
+            //write_discovered("save_state.txt");
+            cout << "No save file found. Making one for you now... " << endl;
+            start_ast = 1;
+            start_ast = 1;
+        }
+    }
 
 void explosion(Point2D loc, double size, type t){
     for (int i = 0; i < 20 + (int)size; ++i){
@@ -122,6 +159,7 @@ void collisions(){
         }
         
     }
+<<<<<<< HEAD
     if (!respawning){
         for (int i = 0; i < asteroids.size(); ++i){
             if (asteroids[i].detectCollision(ship)){
@@ -135,6 +173,18 @@ void collisions(){
         }
     }
 }
+=======
+    for (int i = 0; i < asteroids.size(); ++i){
+         if (asteroids[i].detectCollision(ship)){
+             explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
+             explosion(ship.getLocation(), 30, SHIP);
+             ship.regenerate();
+             asteroids.erase(asteroids.begin() + i);
+             i--;
+         }
+     }
+} 
+>>>>>>> origin/master
 
 
 
@@ -244,12 +294,14 @@ void animation(){
 void init() {
    // test();
     start();
+    screen = menu;
     cout << "Number of asteroids to start:" << start_ast << endl;
     screen_width = 600;
     screen_height = 600;
     ship = Ship();
     for (int i = 0; i < start_ast; ++i){
         asteroids.push_back(Asteroid());
+        
     }
     respawning = true;
 }
@@ -260,6 +312,34 @@ void initGL() {
     // Set "clearing" or background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black and opaque
     glColor3f(0.0f, 0.0f, 1.0f);
+}
+
+void play(){
+    
+    if (screen == game_play){
+        if (keys[GLUT_KEY_LEFT]){
+            ship.rotateL();
+        }
+        if (keys[GLUT_KEY_RIGHT]){
+            ship.rotateR();
+        }
+        if (keys[GLUT_KEY_UP]){
+            ship.move();
+            spawnThrustFire();
+        }
+        if (keys[32]){
+            generateBullet();
+        }
+        moveAllAsteroids();
+        reduceFire();
+        collisions();
+        moveBullets();
+        counter++;
+        if (counter % 100 == 0 && asteroids.size() < 5){
+            asteroids.push_back(Asteroid());
+        }
+        ship.update();
+    }
 }
 
 /* Handler for window-repaint event. Call back when the window first appears and
@@ -281,6 +361,20 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     
     animation();
+    
+    switch(screen) {
+        case menu:
+            display_menu();
+            break;
+        case game_play:
+            //play();
+            break;
+        case game_over:
+            //display_game_over();
+            break;
+        case paused:
+            display_paused();
+    }
     
     glFlush();
 }
@@ -304,6 +398,14 @@ void kbd(unsigned char key, int x, int y)
     
     if (key == 'R') {
         glColor3f(1.0f, 0.0f, 0.0f);
+    }
+    
+    if (key == 'p' && screen == game_play) {
+        screen = paused;
+    }
+    
+    if (key == 'r' && screen == paused){
+        screen = game_play;
     }
     
     glutPostRedisplay();
@@ -376,9 +478,13 @@ void cursor(int x, int y) {
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
 // state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP &&screen == menu) {
+        screen = game_play;
+    }
     glutPostRedisplay();
 }
 
+<<<<<<< HEAD
 void play(){
     if (keys[GLUT_KEY_LEFT]){
         ship.rotateL();
@@ -412,6 +518,9 @@ void play(){
         }
     }
 }
+=======
+
+>>>>>>> origin/master
 void timer(int extra) {
     play();
     
