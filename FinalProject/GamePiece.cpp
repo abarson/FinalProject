@@ -285,15 +285,7 @@ void Bullet::initFields(Point2D dIn, Point2D loc){
     
     shape.set_center(Point2D(loc.get_x() + dIn.get_x(), loc.get_y() + dIn.get_y()));
     
-    //set the target to be the opposite side of the screen of the Asteroid
-    target.set_x(shape.get_center().get_x()+200);
-    target.set_y(shape.get_center().get_y()+200);
-    
-    double x_dir = target.get_x() - getLocation().get_x();
-    double y_dir = target.get_y() - getLocation().get_y();
-    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
-    //bdirection.set_x(x_dir/length);
-    //bdirection.set_y(y_dir/length);
+
     
 }
 
