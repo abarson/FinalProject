@@ -10,6 +10,7 @@
 #include "GamePiece.hpp"
 #include <iostream>
 #include <fstream>
+//#include <irrklang/irrKlang.h>
 
 GLdouble screen_width, screen_height;
 
@@ -31,6 +32,28 @@ int start_ast;
 bool keys[256];
 
 ofstream write_discovered;
+
+/*ALCdevice *device;
+
+ALsizei size, freq;
+ALenum format;
+ALvoid *data;
+ALboolean loop = AL_FALSE;
+
+
+
+
+void test(){
+    device = alcOpenDevice(NULL);
+    if (!device){
+        cout << "Oh no..." << endl;
+    } else {
+        cout << "Heck yeah." << endl;
+    }
+    
+    
+}
+*/
 void start(){
     ifstream in_file("save_state.txt");
     if (in_file){
@@ -126,6 +149,7 @@ void moveBullets(){
     }
 }
 void init() {
+   // test();
     start();
     cout << "Number of asteroids to start:" << start_ast << endl;
     screen_width = 600;
