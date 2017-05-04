@@ -20,6 +20,8 @@ vector<Asteroid> asteroids;
 
 vector<Circle_Coord> thrustFire;
 
+vector<Circle_Coord> explosionFire;
+
 Ship ship;
 vector<Bullet> clip;
 
@@ -58,12 +60,23 @@ void test(){
 }
 */
 
-
+void explosion(Point2D loc){
+    for (int i = 0; i < 50; ++i){
+        Circle_Coord c(rand() % 5);
+            c.set_outside_color(100.0/255, 100.0/255, 100.0/255);
+            c.set_color(150.0/255, 150.0/255, 150.0/255);
+        
+        c.set_center(loc.get_x() + rand() % (20 - (-20) + 1) + (-20), loc.get_y() + rand() % (20 - (-20) + 1) + (-20));
+        explosionFire.push_back(c);
+        
+    }
+}
 
 void collisions(){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
             if (asteroids[i].detectCollision(clip[j])){
+                explosion(asteroids[i].getLocation());
                 asteroids.erase(asteroids.begin() + i);
                 clip.erase(clip.begin() + j);
                 i--;
@@ -141,13 +154,22 @@ void spawnThrustFire(){
     
 }
 
-void reduceThrustFire(){
+void reduceFire(){
     for (int i = 0; i < thrustFire.size(); ++i){
         thrustFire[i].set_center(Point2D(thrustFire[i].get_center_x() + rand() % (5 - (-5) + 1) + (-5), thrustFire[i].get_center_y() + rand() % (5 - (-5) + 1) + (-5)));
         thrustFire[i].set_radius(thrustFire[i].get_radius()-0.20);
         if (thrustFire[i].get_radius() < 0.01){
             thrustFire[i].set_radius(0);
             thrustFire.erase(thrustFire.begin() + i);
+            i--;
+        }
+    }
+    for (int i = 0; i < explosionFire.size(); ++i){
+        explosionFire[i].set_center(Point2D(explosionFire[i].get_center_x() + rand() % (5 - (-5) + 1) + (-5), explosionFire[i].get_center_y() + rand() % (5 - (-5) + 1) + (-5)));
+        explosionFire[i].set_radius(explosionFire[i].get_radius()-0.20);
+        if (explosionFire[i].get_radius() < 0.01){
+            explosionFire[i].set_radius(0);
+            explosionFire.erase(explosionFire.begin() + i);
             i--;
         }
     }
@@ -215,8 +237,12 @@ void display() {
     ship.drawShape();
     drawAllAsteroids();
     
-    for (int i = 0; i < thrustFire.size(); i++){
+    for (int i = 0; i < thrustFire.size(); ++i){
         thrustFire[i].draw();
+    }
+    
+    for (int i = 0; i < explosionFire.size(); ++i){
+        explosionFire[i].draw();
     }
     drawBullets();
     
@@ -320,7 +346,7 @@ void timer(int extra) {
         spawnThrustFire();
     }
     moveAllAsteroids();
-    reduceThrustFire();
+    reduceFire();
     moveBullets();
     counter++;
     if (counter % 100 == 0 && asteroids.size() < 5){
