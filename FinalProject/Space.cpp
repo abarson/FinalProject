@@ -306,6 +306,17 @@ void initGL() {
     glColor3f(0.0f, 0.0f, 1.0f);
 }
 
+void levelHandler(int l){
+    counter++;
+    switch(l){
+        case(1):
+            if (counter % 100 == 0 && asteroids.size() < 5){
+                asteroids.push_back(Asteroid());
+            }
+            break;
+    }
+    
+}
 
 void play(){
     
@@ -327,10 +338,7 @@ void play(){
         reduceFire();
         collisions();
         moveBullets();
-        counter++;
-        if (counter % 100 == 0 && asteroids.size() < 5){
-            asteroids.push_back(Asteroid());
-        }
+        levelHandler(level);
         ship.update();
         
         if (respawning){

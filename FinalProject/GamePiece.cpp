@@ -383,7 +383,7 @@ void Powerup::initFields(){
     
     int x=600;
     int y=2;
-    }
+    
     shape.set_center(x,y);
     
     //set the target to be the opposite side of the screen of the Powerup
