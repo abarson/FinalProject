@@ -18,7 +18,7 @@
 #define BUFFER 20 //the distance from the edge of the screen the Ship or Asteroid can go before being moved to the opposite side of the screen
 #define ROTATION_FORCE 5 //the amount of degrees the Ship rotates
 #define FRICTION 0.95 //the force used to slow down the Ship
-#define SHOT_DELAY 10
+#define SHOT_DELAY 5
 using namespace std;
 
 class GamePiece{
