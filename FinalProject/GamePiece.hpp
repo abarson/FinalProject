@@ -66,13 +66,6 @@ public:
     virtual void move() = 0;
     
     /**
-     * Requires: nothing
-     * Modifies: nothing
-     * Effects: checks to see if this GamePiece has intersected with another compatible GamePiece
-     */
-    virtual bool detectCollision(GamePiece &piece) const = 0;
-    
-    /**
      * Requires: vIn >= 1
      * Modifies: velocity
      * Effects: sets a new velocity
@@ -178,12 +171,19 @@ public:
      */
     void checkBounds();
     
+    /**
+     * Requires: nothing
+     * Modifies: shotDelay
+     * Effects: 
+     */
     void gunUpdate();
     
     void setShotDelay(int sIn);
     
     int getShotDelay() const;
     
+    
+    Triangle_Coord getTriangle() const;
     
     
     //Triangle shape
@@ -198,9 +198,6 @@ public:
     //movement based on user input
     virtual void move() override;
     
-    //collision detection will be detected with Asteroids
-    virtual bool detectCollision(GamePiece &piece) const override;
-    
 private:
     Triangle_Coord shape;
     int numLives;
@@ -208,6 +205,40 @@ private:
     Point2D velocity;
     double shotDelay;
 };
+
+class Bullet: public GamePiece{
+public:
+    /**
+     * Requires: nothing
+     * Modifies: instance fields
+     * Effects: set direction of Bullet and set instance fields to default values
+     */
+    Bullet(Point2D dIn, Point2D loc);
+    void initFields(Point2D dIn, Point2D loc);
+    
+    Circle_Coord getCircle() const;
+    
+    //the shape of the Bullet is a simple line
+    virtual Shape getShape() const override;
+    
+    virtual void drawShape() override;
+    
+    //There will be no explosion for the bullet, just removal from the screen
+    virtual void explode() override;
+    
+    virtual Point2D getLocation() const override;
+    
+    //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
+    virtual void move() override;
+    
+private:
+    Point2D baseVelocity;
+    Point2D bdirection;
+    int lifeTime;
+    Circle_Coord shape;
+    //We will need a line object
+};
+
 class Asteroid: public GamePiece{
 public:
     /**
@@ -235,46 +266,16 @@ public:
     
     virtual void move() override;
     
-    virtual bool detectCollision(GamePiece &piece) const override;
+    bool detectCollision(Bullet &bIn) const;
     
+    bool detectCollision(Ship &sIn) const;
 private:
     //fields
     Circle_Coord shape;
     Point2D direction;
     
 };
-class Bullet: public GamePiece{
-public:
-    /**
-     * Requires: nothing
-     * Modifies: instance fields
-     * Effects: set direction of Bullet and set instance fields to default values
-     */
-    Bullet(Point2D dIn, Point2D loc);
-    void initFields(Point2D dIn, Point2D loc);
-    //the shape of the Bullet is a simple line
-    virtual Shape getShape() const override;
-    
-    virtual void drawShape() override;
-    
-    //There will be no explosion for the bullet, just removal from the screen
-    virtual void explode() override;
-    
-    virtual Point2D getLocation() const override;
-    
-    //the Bullet moves in a straight line with the direction dictated by the direction of the Ship
-    virtual void move() override;
-    
-    virtual bool detectCollision(GamePiece &piece) const override;
-    
-private:
-    Point2D baseVelocity;
-    Point2D bdirection;
-    int lifeTime;
-    Circle_Coord shape;
-    Ship ship;
-    //We will need a line object
-};
+
 
 
 

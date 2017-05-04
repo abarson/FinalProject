@@ -49,14 +49,7 @@ void Ship::rotateL(){
     shape.rotate(-ROTATION_FORCE);
 }
 void Ship::shoot(){
-    cout << "shoot"<<endl;
     shotDelay++;
-    
-    //not implemented
-    // call a bullet polygon each time the space bar is pressed
-    // center that bullet polygon at the tip vertex of the ship
-    // have it faced in (get direction)
-    // move at a constant velocity in direction
 }
 
 Point2D Ship::getDirection() const{
@@ -123,7 +116,6 @@ void Ship::speedCap(){
     velocity.set_x(result_x);
     velocity.set_y(result_y);
     speed = sqrt(pow((result_x), 2) + pow((result_y), 2));
-    cout << speed << ": " << result_x << ", " << result_y << endl;
 }
 
 void Ship::checkBounds(){
@@ -166,6 +158,10 @@ int Ship::getShotDelay() const{
     return shotDelay;
 }
 
+Triangle_Coord Ship::getTriangle() const{
+    return shape;
+}
+
 Shape Ship::getShape() const {
     return shape;
 }
@@ -189,9 +185,47 @@ void Ship::move() {
     
     spawnThrustFire();
 }
-bool Ship::detectCollision(GamePiece &piece) const {
+
+
+Bullet::Bullet(Point2D dIn, Point2D loc): GamePiece(){
+    shape = Circle_Coord();
+    bdirection = dIn;
+    initFields(dIn, loc);
+}
+
+void Bullet::initFields(Point2D dIn, Point2D loc){
+    double r_velocity = 5;
+    double r_size = 4;
+    setVelocity(r_velocity);
+    shape.set_radius(r_size);
+    
+    shape.set_color(1, 0, 0);
+    
+    shape.set_center(Point2D(loc.get_x() + dIn.get_x(), loc.get_y() + dIn.get_y()));
+    
+    
+    
+}
+
+Circle_Coord Bullet::getCircle() const{
+    return shape;
+}
+
+Shape Bullet::getShape() const {
+    return shape;
+}
+void Bullet::drawShape() {
+    shape.draw();
+}
+void Bullet::explode() {
     //not implemented
-    return false;
+}
+Point2D Bullet::getLocation() const{
+    return Point2D();
+}
+void Bullet::move() {
+    shape.set_center(shape.get_center().get_x() + (bdirection.get_x())*15, shape.get_center().get_y() + (bdirection.get_y())*15);
+    
 }
 
 Asteroid::Asteroid(): GamePiece(){
@@ -202,6 +236,7 @@ Asteroid::Asteroid(): GamePiece(){
 void Asteroid::initFields(){
     double r_velocity = rand() % 8 + 3;
     double r_size = rand() % 30 + 20;
+    //double r_size = 10;
     setVelocity(r_velocity);
     shape.set_radius(r_size);
     
@@ -283,50 +318,33 @@ void Asteroid::move(){
     }
 }
 
-bool Asteroid::detectCollision(GamePiece &piece) const{
-    return false;
-}
-  
-Bullet::Bullet(Point2D dIn, Point2D loc): GamePiece(){
-    shape = Circle_Coord();
-    bdirection = dIn;
-    initFields(dIn, loc);
-}
-
-void Bullet::initFields(Point2D dIn, Point2D loc){
-    double r_velocity = 5;
-    double r_size = 2;
-    setVelocity(r_velocity);
-    shape.set_radius(r_size);
-    
-    shape.set_color(1, 0, 0);
-    //shape.set_outside_color(255/255, 0/255, 0/255);
-    //shape.set_color(255/255, 0/255, 0/255);
-    
-    shape.set_center(Point2D(loc.get_x() + dIn.get_x(), loc.get_y() + dIn.get_y()));
-    
-
-    
+bool Asteroid::detectCollision(Bullet &bIn) const{
+   // return shape.is_overlapping(bIn.getCircle());
+    if (shape.is_overlapping(bIn.getCircle())){
+        cout << "HIT" << endl;
+        return true;
+    } else {
+        return false;
+    }
 }
 
-Shape Bullet::getShape() const {
-    return shape;
+bool Asteroid::detectCollision(Ship &sIn) const{
+    Triangle_Coord triangle = sIn.getTriangle();
+    if (shape.is_overlapping(triangle.get_tip().get_x(), triangle.get_tip().get_y()) ||
+            shape.is_overlapping(triangle.get_bl().get_x(), triangle.get_bl().get_y()) ||
+        shape.is_overlapping(triangle.get_br().get_x(), triangle.get_br().get_y())){
+        cout << "the ship got hit" << endl;
+        return true;
+    } else {
+        return false;
+    }
 }
-void Bullet::drawShape() {
-    shape.draw();
-}
-void Bullet::explode() {
-    //not implemented
-}
-Point2D Bullet::getLocation() const{
-    return Point2D();
-}
-void Bullet::move() {
-    shape.set_center(shape.get_center().get_x() + (bdirection.get_x())*15, shape.get_center().get_y() + (bdirection.get_y())*15);
-    
-    
-}
-bool Bullet::detectCollision(GamePiece &piece) const {
-    //not implemented
-    return false;
-}
+
+
+
+
+
+
+
+
+

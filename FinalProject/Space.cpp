@@ -68,10 +68,15 @@ void collisions(){
                 j--;
             }
         }
-        if (asteroids[i].detectCollision(ship)){
-            //
-        }
+        
     }
+    for (int i = 0; i < asteroids.size(); ++i){
+         if (asteroids[i].detectCollision(ship)){
+             asteroids.erase(asteroids.begin() + i);
+             i--;
+         }
+         
+     }
 }
 void start(){
     ifstream in_file("save_state.txt");
@@ -320,6 +325,7 @@ void timer(int extra) {
        asteroids.push_back(Asteroid());
     }
     ship.update();
+    collisions();
     glutTimerFunc(30, timer, 0);
     glutPostRedisplay();
 }
