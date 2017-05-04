@@ -267,19 +267,39 @@ bool Asteroid::detectCollision(GamePiece &piece) const{
     return false;
 }
   
-Bullet::Bullet(Ship ship){
-    bullet_shape=Circle_Coord(1);
-    bullet_shape.set_center(ship.getDirection().get_x(), ship.getDirection().get_y());
-    bullet_shape.set_color(1, 0, 0);
-
-
-    int lifeTime = 10;
+Bullet::Bullet(): GamePiece(){
+    shape = Circle_Coord();
+    initFields();
 }
+
+void Bullet::initFields(){
+    double r_velocity = 5;
+    double r_size = 2;
+    setVelocity(r_velocity);
+    shape.set_radius(r_size);
+    
+    shape.set_outside_color(255/255, 0/255, 0/255);
+    shape.set_color(255/255, 0/255, 0/255);
+    
+//    shape.set_center();
+    
+    //set the target to be the opposite side of the screen of the Asteroid
+    target.set_x(shape.get_center().get_x()+200);
+    target.set_y(shape.get_center().get_y()+200);
+    
+    double x_dir = target.get_x() - getLocation().get_x();
+    double y_dir = target.get_y() - getLocation().get_y();
+    double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
+    bdirection.set_x(x_dir/length);
+    bdirection.set_y(y_dir/length);
+    
+}
+
 Shape Bullet::getShape() const {
-    return bullet_shape;
+    return shape;
 }
 void Bullet::drawShape() {
-    bullet_shape.draw();
+    shape.draw();
 }
 void Bullet::explode() {
     //not implemented
@@ -288,16 +308,11 @@ Point2D Bullet::getLocation() const{
     return Point2D();
 }
 void Bullet::move() {
-    
-    Point2D blocate=ship.getDirection();
-    baseVelocity.set_x(blocate.get_x() + blocate.get_x());
-    baseVelocity.set_y(blocate.get_y() + blocate.get_y());
-    
+//    shape.set_center(getLocation().get_x() + (direction.get_x()) * getVelocity(), getLocation().get_y() + (direction.get_y()) * getVelocity());
+//    
     
 }
 bool Bullet::detectCollision(GamePiece &piece) const {
     //not implemented
     return false;
 }
-
-

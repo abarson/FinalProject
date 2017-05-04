@@ -29,6 +29,9 @@
 /* Game Functionality */
 
 void spawnThrustFire();
+void drawBullets();
+void moveBullets();
+
 
 /**
  * Requires: nothing

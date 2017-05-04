@@ -20,7 +20,7 @@ vector<Asteroid> asteroids;
 vector<Circle_Coord> thrustFire;
 
 Ship ship;
-Bullet bullet;
+vector<Bullet> clip;
 
 int mouse_x, mouse_y = 0;
 
@@ -115,20 +115,27 @@ void moveAllAsteroids(){
         asteroids[i].move();
     }
 }
-
+void drawBullets(){
+    for(int i=0; i<clip.size();++i){
+        clip[i].drawShape();
+    }
+}
+void moveBullets(){
+    for(int i=0; i<clip.size();++i){
+        clip[i].drawShape();
+    }
+}
 void init() {
     start();
     cout << "Number of asteroids to start:" << start_ast << endl;
     screen_width = 600;
     screen_height = 600;
     ship = Ship();
-    bullet=Bullet();
     for (int i = 0; i < start_ast; ++i){
         asteroids.push_back(Asteroid());
     }
-    
-    
 }
+
 
 /* Initialize OpenGL Graphics */
 void initGL() {
@@ -176,9 +183,8 @@ void kbd(unsigned char key, int x, int y)
     }
     if (key == 32){
         ship.shoot();
-        bullet.drawShape();
-        
-        
+        clip.push_back(Bullet(Point2D(ship.getDirection().get_x())
+    
     }
     
     if (key == 'G') {

@@ -240,8 +240,8 @@ public:
      * Modifies: instance fields
      * Effects: set direction of Bullet and set instance fields to default values
      */
-    Bullet(Ship ship);
-    
+    Bullet();
+    void initFields();
     //the shape of the Bullet is a simple line
     virtual Shape getShape() const override;
     
@@ -261,7 +261,7 @@ private:
     Point2D baseVelocity;
     Point2D bdirection;
     int lifeTime;
-    Circle_Coord bullet_shape;
+    Circle_Coord shape;
     Ship ship;
     //We will need a line object
 };
