@@ -60,13 +60,13 @@ void test(){
 }
 */
 
-void explosion(Point2D loc){
-    for (int i = 0; i < 50; ++i){
-        Circle_Coord c(rand() % 5);
+void explosion(Point2D loc, double size){
+    for (int i = 0; i < 20 + (int)size; ++i){
+        Circle_Coord c(rand() % ((int)size / 6));
             c.set_outside_color(100.0/255, 100.0/255, 100.0/255);
             c.set_color(150.0/255, 150.0/255, 150.0/255);
         
-        c.set_center(loc.get_x() + rand() % (20 - (-20) + 1) + (-20), loc.get_y() + rand() % (20 - (-20) + 1) + (-20));
+        c.set_center(loc.get_x() + rand() % ((int)size - (-(int)size) + 1) + (-(int)size), loc.get_y() + rand() % ((int)size - (-(int)size) + 1) + (-(int)size));
         explosionFire.push_back(c);
         
     }
@@ -76,7 +76,7 @@ void collisions(){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
             if (asteroids[i].detectCollision(clip[j])){
-                explosion(asteroids[i].getLocation());
+                explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius());
                 asteroids.erase(asteroids.begin() + i);
                 clip.erase(clip.begin() + j);
                 i--;
@@ -334,7 +334,7 @@ void mouse(int button, int state, int x, int y) {
     glutPostRedisplay();
 }
 
-void timer(int extra) {
+void play(){
     if (keys[GLUT_KEY_LEFT]){
         ship.rotateL();
     }
@@ -350,10 +350,15 @@ void timer(int extra) {
     moveBullets();
     counter++;
     if (counter % 100 == 0 && asteroids.size() < 5){
-       asteroids.push_back(Asteroid());
+        asteroids.push_back(Asteroid());
     }
     ship.update();
     collisions();
+}
+
+void timer(int extra) {
+    play();
+    
     glutTimerFunc(30, timer, 0);
     glutPostRedisplay();
 }

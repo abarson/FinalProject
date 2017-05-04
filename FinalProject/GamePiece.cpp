@@ -282,6 +282,11 @@ void Asteroid::initFields(){
     direction.set_y(y_dir/length);
     
 }
+
+Circle_Coord Asteroid::getCircle() const{
+    return shape;
+}
+
 Shape Asteroid::getShape() const{
     return shape;
 }
