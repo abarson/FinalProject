@@ -159,7 +159,6 @@ void collisions(){
         }
         
     }
-<<<<<<< HEAD
     if (!respawning){
         for (int i = 0; i < asteroids.size(); ++i){
             if (asteroids[i].detectCollision(ship)){
@@ -173,19 +172,6 @@ void collisions(){
         }
     }
 }
-=======
-    for (int i = 0; i < asteroids.size(); ++i){
-         if (asteroids[i].detectCollision(ship)){
-             explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
-             explosion(ship.getLocation(), 30, SHIP);
-             ship.regenerate();
-             asteroids.erase(asteroids.begin() + i);
-             i--;
-         }
-     }
-} 
->>>>>>> origin/master
-
 
 
 void spawnThrustFire(){
@@ -314,6 +300,7 @@ void initGL() {
     glColor3f(0.0f, 0.0f, 1.0f);
 }
 
+
 void play(){
     
     if (screen == game_play){
@@ -339,6 +326,15 @@ void play(){
             asteroids.push_back(Asteroid());
         }
         ship.update();
+        
+        if (respawning){
+            ship.setRespawning(ship.getRespawning() + 1);
+            ship.blink();
+            if (ship.getRespawning() == 50){
+                ship.setRespawning(0);
+                respawning = false;
+            }
+        }
     }
 }
 
@@ -484,43 +480,7 @@ void mouse(int button, int state, int x, int y) {
     glutPostRedisplay();
 }
 
-<<<<<<< HEAD
-void play(){
-    if (keys[GLUT_KEY_LEFT]){
-        ship.rotateL();
-    }
-    if (keys[GLUT_KEY_RIGHT]){
-        ship.rotateR();
-    }
-    if (keys[GLUT_KEY_UP]){
-        ship.move();
-        spawnThrustFire();
-    }
-    if (keys[32]){
-        generateBullet();
-    }
-    moveAllAsteroids();
-    reduceFire();
-    collisions();
-    moveBullets();
-    counter++;
-    if (counter % 100 == 0 && asteroids.size() < 5){
-        asteroids.push_back(Asteroid());
-    }
-    ship.update();
-    
-    if (respawning){
-        ship.setRespawning(ship.getRespawning() + 1);
-        ship.blink();
-        if (ship.getRespawning() == 50){
-            ship.setRespawning(0);
-            respawning = false;
-        }
-    }
-}
-=======
 
->>>>>>> origin/master
 void timer(int extra) {
     play();
     
