@@ -267,21 +267,23 @@ bool Asteroid::detectCollision(GamePiece &piece) const{
     return false;
 }
   
-Bullet::Bullet(): GamePiece(){
+Bullet::Bullet(Point2D dIn, Point2D loc): GamePiece(){
     shape = Circle_Coord();
-    initFields();
+    bdirection = dIn;
+    initFields(dIn, loc);
 }
 
-void Bullet::initFields(){
+void Bullet::initFields(Point2D dIn, Point2D loc){
     double r_velocity = 5;
     double r_size = 2;
     setVelocity(r_velocity);
     shape.set_radius(r_size);
     
-    shape.set_outside_color(255/255, 0/255, 0/255);
-    shape.set_color(255/255, 0/255, 0/255);
+    shape.set_color(1, 0, 0);
+    //shape.set_outside_color(255/255, 0/255, 0/255);
+    //shape.set_color(255/255, 0/255, 0/255);
     
-//    shape.set_center();
+    shape.set_center(Point2D(loc.get_x() + dIn.get_x(), loc.get_y() + dIn.get_y()));
     
     //set the target to be the opposite side of the screen of the Asteroid
     target.set_x(shape.get_center().get_x()+200);
@@ -290,8 +292,8 @@ void Bullet::initFields(){
     double x_dir = target.get_x() - getLocation().get_x();
     double y_dir = target.get_y() - getLocation().get_y();
     double length = sqrt(pow((x_dir), 2) + pow((y_dir), 2));
-    bdirection.set_x(x_dir/length);
-    bdirection.set_y(y_dir/length);
+    //bdirection.set_x(x_dir/length);
+    //bdirection.set_y(y_dir/length);
     
 }
 
@@ -308,8 +310,8 @@ Point2D Bullet::getLocation() const{
     return Point2D();
 }
 void Bullet::move() {
-//    shape.set_center(getLocation().get_x() + (direction.get_x()) * getVelocity(), getLocation().get_y() + (direction.get_y()) * getVelocity());
-//    
+    shape.set_center(shape.get_center().get_x() + (bdirection.get_x())*15, shape.get_center().get_y() + (bdirection.get_y())*15);
+    
     
 }
 bool Bullet::detectCollision(GamePiece &piece) const {

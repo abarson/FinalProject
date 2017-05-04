@@ -122,7 +122,7 @@ void drawBullets(){
 }
 void moveBullets(){
     for(int i=0; i<clip.size();++i){
-        clip[i].drawShape();
+        clip[i].move();
     }
 }
 void init() {
@@ -168,6 +168,7 @@ void display() {
     for (int i = 0; i < thrustFire.size(); i++){
         thrustFire[i].draw();
     }
+    drawBullets();
     
     glFlush();
 }
@@ -183,8 +184,7 @@ void kbd(unsigned char key, int x, int y)
     }
     if (key == 32){
         ship.shoot();
-        clip.push_back(Bullet(Point2D(ship.getDirection().get_x())
-    
+        clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
     }
     
     if (key == 'G') {
@@ -267,6 +267,7 @@ void timer(int extra) {
     }
     moveAllAsteroids();
     reduceThrustFire();
+    moveBullets();
     counter++;
     if (counter % 100 == 0 && asteroids.size() < 5){
        asteroids.push_back(Asteroid());

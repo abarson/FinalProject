@@ -240,8 +240,8 @@ public:
      * Modifies: instance fields
      * Effects: set direction of Bullet and set instance fields to default values
      */
-    Bullet();
-    void initFields();
+    Bullet(Point2D dIn, Point2D loc);
+    void initFields(Point2D dIn, Point2D loc);
     //the shape of the Bullet is a simple line
     virtual Shape getShape() const override;
     
