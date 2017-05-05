@@ -130,6 +130,22 @@ void display_game_over(){
     }
 }
 
+void display_level(){
+    string new_game_message = "";
+    if (level == 1){
+        new_game_message = "Level 1";
+    } else if (level == 2){
+        new_game_message = "Level 2";
+    } else {
+        new_game_message = "Level 3";
+    }
+    glColor3f(1, 1, 1);
+    glRasterPos2i(220, 300);
+    for (int i = 0; i < new_game_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
+    }
+}
+
     void start(){
         ifstream in_file("save_state.txt");
         if (in_file){
@@ -324,8 +340,8 @@ void generateBullet(){
                 clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
                 ship.shoot();
             } else {
-                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() + cos(ship.getDirection().get_x()) * 15, ship.getLocation().get_y() + ship.getDirection().get_y()  )));
-                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() - cos(ship.getDirection().get_x()) * 15, ship.getLocation().get_y() + ship.getDirection().get_y())));
+                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() + ship.getDirection().get_y() * 15, ship.getLocation().get_y() - ship.getDirection().get_x() * 15 )));
+                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() - ship.getDirection().get_y() * 15, ship.getLocation().get_y() + ship.getDirection().get_x() * 15)));
                 ship.shoot();
             }
         } 
@@ -350,23 +366,22 @@ void animation(){
     if (magazinetime){
         drawMagazine();
     }
+    
+    if (level_change!=0){
+        display_level();
+    }
 }
 
 void init() {
    // test();
     start();
     level = 1;
-    level_change = 1;
     destroyed = 0;
     screen = menu;
     cout << "Number of asteroids to start:" << start_ast << endl;
     screen_width = 600;
     screen_height = 600;
     ship = Ship();
-    for (int i = 0; i < 3; ++i){
-        asteroids.push_back(Asteroid());
-        
-    }
     respawning = true;
 }
 
@@ -383,7 +398,7 @@ void levelHandler(int l){
         counter++;
         switch(l){
             case(1):
-                if (counter % 100 == 0 && asteroids.size() < 5 && 8 - destroyed > 0){
+                if (counter % 80 == 0 && asteroids.size() < 5 && 8 - destroyed - asteroids.size() > 0){
                     asteroids.push_back(Asteroid());
                 }
                 if (destroyed == 8){
@@ -394,9 +409,9 @@ void levelHandler(int l){
                 }
                 break;
             case(2):
-                if (counter % 100 == 0 && asteroids.size() < 10 && 15 - destroyed > 0){
+                if (counter % 50 == 0 && asteroids.size() < 10 && 15 - destroyed - asteroids.size() > 0){
                     asteroids.push_back(Asteroid());
-                    if (asteroids.size() < 10){
+                    if (asteroids.size() < 10 && 15 - destroyed - asteroids.size() > 0){
                         asteroids.push_back(Asteroid());
                     }
                 }
@@ -594,6 +609,7 @@ void cursor(int x, int y) {
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP &&screen == menu) {
         screen = game_play;
+        level_change = 1;
     }
     glutPostRedisplay();
 }
