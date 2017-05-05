@@ -249,8 +249,9 @@ void start(){
     }
 void savegame(){
     ofstream out_file;
-    out_file.open("save_state.txt");
-    out_file<<ship.getNumLives()<<level;
+    out_file.open("save.txt");
+    out_file<<ship.getNumLives()<<endl;\
+    out_file<<level<<endl;
     out_file.close();
 }
 
@@ -718,7 +719,7 @@ void kbd(unsigned char key, int x, int y)
         screen = game_play;
         
     }
-    if (key == 's' && screen == paused){
+    if (screen == paused && key == 115){
         savegame();
         
     }
