@@ -188,6 +188,7 @@ void collisions(){
                 j--;
                 destroyed++;
                 cout << "Destroyed " << destroyed << endl;
+                magazinetime=false;
             }
         }
         
@@ -202,6 +203,7 @@ void collisions(){
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
                 i--;
+                magazinetime=false;
             }
         }
     }
