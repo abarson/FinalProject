@@ -180,6 +180,18 @@ void display_lives(){
     }
 }
 
+void display_stars(){
+    int rand_x = rand() % 600 + 1;
+    int rand_y = rand() % 600 + 1;
+    string star = ".";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(rand_x, rand_y);
+    for(int i = 0; i < star.length(); ++i){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, star[i]);
+    }
+    
+}
+
 void remove_life(){
     lives.erase(lives.begin() + lives.size() - 1);
 }
@@ -390,6 +402,9 @@ void generateBullet(){
 }
 
 void animation(){
+    for (int s = 0; s < 100; ++s){
+        display_stars();
+    }
     if (gameOverWait < 100){
         if (screen != game_over){
             ship.drawShape();
