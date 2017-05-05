@@ -106,6 +106,22 @@ void display_paused(){
     }
 }
 
+void display_game_over(){
+    string game_over_message = "GAME OVER";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(250, 250);
+    for (int i = 0; i < game_over_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game_over_message[i]);
+    }
+    
+    string new_game_message = "Click anywhere for a new game";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(220, 300);
+    for (int i = 0; i < new_game_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
+    }
+}
+
     void start(){
         ifstream in_file("save_state.txt");
         if (in_file){
@@ -343,7 +359,6 @@ void play(){
         moveBullets();
         PU.move();
         levelHandler(level);
-        counter++;
         ship.update();
         
         if (respawning){
