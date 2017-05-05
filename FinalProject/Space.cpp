@@ -27,12 +27,12 @@ vector<Circle_Coord> explosionFire;
 
 Ship ship;
 vector<Bullet> clip;
-vector<Bullet> magazine;
 Powerup PU1(color{0, 0, 1});
 Powerup PU2(color{0, 1, 0});
 
 screen_state screen;
 
+vector<Triangle_Coord>lives;
 
 int mouse_x, mouse_y = 0;
 
@@ -56,6 +56,10 @@ int counter = 0;
 int power_counter = 0;
 int level;
 int destroyed;
+
+int score = 0;
+
+int gameOverWait = 0;
 
 //winmm.lib
 //conio.h
@@ -118,37 +122,70 @@ void display_paused(){
 
 void display_game_over(){
     string game_over_message = "GAME OVER";
-    glColor3f(1, 1, 1);
-    glRasterPos2i(250, 250);
+    glColor3f(1, 0, 0);
+    glRasterPos2i(230, 250);
     for (int i = 0; i < game_over_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game_over_message[i]);
     }
     
-    string new_game_message = "Click anywhere for a new game";
-    glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
+    string new_game_message = "'n' for new game";
+    glColor3f(1, 0, 0);
+    glRasterPos2i(210, 300);
     for (int i = 0; i < new_game_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
     }
 }
 
-void display_level(){
-    string new_game_message = "";
-    if (level == 1){
-        new_game_message = "Level 1";
-    } else if (level == 2){
-        new_game_message = "Level 2";
-    } else if (level == 3){
-        new_game_message = "Level 3";
-    } else if (level == 4){
-        new_game_message = "Level 4";
-    }
+void display_level(int x, int y){
+    char buffer[10]={'\0'};
+    sprintf(buffer, "%d", level);
+    string level_message = "Level: ";
     glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
-    for (int i = 0; i < new_game_message.length(); ++i) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
+    glRasterPos2i(x, y);
+    for (int i = 0; i < level_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, level_message[i]);
+    }
+    string level_message1 = buffer;
+    glColor3f(1, 1, 1);
+    glRasterPos2i(x + 65, y);
+    for (int j = 0; j < level_message1.length(); ++j){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, level_message1[j]);
     }
 }
+
+void display_score(){
+    char buffer[10]={'\0'};
+    sprintf(buffer, "%d", score);
+    string score_message = "Score: ";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(460, 20);
+    for (int i = 0; i < score_message.length(); i++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message[i]);
+    }
+    string score_message1 = buffer;
+    glColor3f(1,1,1);
+    glRasterPos2i(525, 22);
+    for (int j = 0; j < score_message1.length(); j++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message1[j]);
+    }
+}
+
+void display_lives(){
+    for (int i = 0; i < lives.size(); ++i){
+        if (lives.size() > 0){
+            lives[i].draw();
+        }
+    }
+}
+
+void remove_life(){
+    lives.erase(lives.begin() + lives.size() - 1);
+}
+
+void add_life(){
+    lives.push_back(Triangle_Coord(lives.size() * 20 + 110, 5, 5));
+}
+
 
     void start(){
         ifstream in_file("save_state.txt");
@@ -198,8 +235,13 @@ void explosion(Point2D loc, double size, type t){
 }
 
 void collisions(){
+    if (asteroids.size() > 0 && clip.size() > 0){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
+            if (i > asteroids.size() || i < 0){
+                cout << "uh oh " << i << endl;
+                break;
+            }
             if (asteroids[i].detectCollision(clip[j])){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 asteroids.erase(asteroids.begin() + i);
@@ -208,16 +250,22 @@ void collisions(){
                 j--;
                 destroyed++;
                 cout << "Destroyed " << destroyed << endl;
+                score += 100;
             }
         }
-        
     }
-    if (!respawning){
+    }
+    if (!respawning && screen != game_over){
         for (int i = 0; i < asteroids.size(); ++i){
-            if (asteroids[i].detectCollision(ship)){
+            if (asteroids[i].detectCollision(ship) && !respawning){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
+                ship.setNumLives(ship.getNumLives()-1);
+                if (ship.getNumLives() == 0){
+                    screen = game_over;
+                }
+                remove_life();
                 cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
@@ -237,12 +285,11 @@ void collisions(){
         if (PU2.detectCollision(ship)){
             explosion(PU2.getLocation(), PU2.getCircle().get_radius(), POWERUP);
             power_up2 = false;
-            cout << "HOLY MOLY" << endl;
+            add_life();
+            ship.setNumLives(ship.getNumLives() + 1);
         }
-    }
-}
-
-
+   
+    }}
 void spawnThrustFire(){
     Circle_Coord c1(2);
     c1.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40 - rand() % 8 + 1, ship.getLocation().get_y() -ship.getDirection().get_y() * 40));
@@ -322,20 +369,6 @@ void moveBullets(){
         }
     }
 }
-void moveMagainze(){
-    for(int i=0; i<magazine.size();++i){
-        magazine[i].move();
-        if (magazine[i].getLifeTime() > 50){
-            magazine.erase(magazine.begin() + i);
-            i--;
-        }
-    }
-}
-void drawMagazine(){
-    for(int i=0; i<magazine.size();++i){
-        magazine[i].drawShape();
-    }
-}
 
 
 
@@ -355,43 +388,64 @@ void generateBullet(){
 }
 
 void animation(){
-    ship.drawShape();
-    drawAllAsteroids();
+    if (gameOverWait < 100){
+        if (screen != game_over){
+            ship.drawShape();
+        }
+        display_lives();
+        drawAllAsteroids();
+        display_score();
+        display_level(20,20);
+        for (int i = 0; i < thrustFire.size(); ++i){
+            thrustFire[i].draw();
+        }
     
-    for (int i = 0; i < thrustFire.size(); ++i){
-        thrustFire[i].draw();
+        for (int i = 0; i < explosionFire.size(); ++i){
+            explosionFire[i].draw();
+        }
+        drawBullets();
+        if (power_up1){
+            PU1.drawShape();
+        }
+        if (power_up2){
+            PU2.drawShape();
+        }
+    
+        if (level_change!=0){
+            display_level(200, 300);
+        }
+    }
+}
+
+void startGame(){
+    asteroids.clear();
+    clip.clear();
+    score = 0;
+    destroyed = 0;
+    gameOverWait = 0;
+    screen = menu;
+    ship.regenerate();
+    ship.setNumLives(3);
+    respawning = true;
+    level = 1;
+    
+    for (int i = 0; i < ship.getNumLives(); ++i){
+        add_life();
     }
     
-    for (int i = 0; i < explosionFire.size(); ++i){
-        explosionFire[i].draw();
-    }
-    drawBullets();
-    if (power_up1){
-        PU1.drawShape();
-    }
-    if (power_up2){
-        PU2.drawShape();
-    }
-    if (magazinetime){
-        drawMagazine();
-    }
-    
-    if (level_change!=0){
-        display_level();
-    }
+    power_up1 = false;
+    power_up2 = false;
+    cout << "Number of asteroids to start:" << start_ast << endl;
 }
 
 void init() {
    // test();
-    start();
-    level = 1;
-    destroyed = 0;
-    screen = menu;
-    cout << "Number of asteroids to start:" << start_ast << endl;
+    //start();
+    ship = Ship();
+    startGame();
     screen_width = 600;
     screen_height = 600;
-    ship = Ship();
-    respawning = true;
+    
 }
 
 
@@ -450,6 +504,26 @@ void levelHandler(int l){
                     counter = 0;
                 }
                 break;
+            case(4):
+                if (counter % 30 == 0 && asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                    asteroids.push_back(Asteroid());
+                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                }
+                if (destroyed == 30){
+                    level++;
+                    level_change = 1;
+                    destroyed = 0;
+                    counter = 0;
+                }
+                break;
         }
     } else {
         level_change++;
@@ -467,8 +541,11 @@ void levelHandler(int l){
                 for (int i = 0; i < 5; ++i){
                     asteroids.push_back(Asteroid());
                 }
+            } else if (level == 4){
+                for (int i = 0; i < 6; ++i){
+                    asteroids.push_back(Asteroid());
+                }
             }
-            
         }
     }
     
@@ -476,7 +553,7 @@ void levelHandler(int l){
 
 void play(){
     
-    if (screen == game_play){
+    if (screen == game_play || (screen == game_over && gameOverWait < 100)){
         if (keys[GLUT_KEY_LEFT]){
             ship.rotateL();
         }
@@ -484,8 +561,11 @@ void play(){
             ship.rotateR();
         }
         if (keys[GLUT_KEY_UP]){
-            ship.move();
-            spawnThrustFire();
+            if (screen != game_over){
+                ship.move();
+                spawnThrustFire();
+            }
+            
         }
         if (keys[32]){
             generateBullet();
@@ -502,7 +582,6 @@ void play(){
         reduceFire();
         collisions();
         moveBullets();
-        moveMagainze();
         
         if (power_up1){
             PU1.move();
@@ -548,10 +627,16 @@ void display() {
             display_menu();
             break;
         case game_play:
+            
             //play();
             break;
         case game_over:
-            //display_game_over();
+            if (gameOverWait > 100){
+                display_game_over();
+            } else {
+                gameOverWait++;
+            }
+            
             break;
         case paused:
             display_paused();
@@ -587,6 +672,11 @@ void kbd(unsigned char key, int x, int y)
     
     if (key == 'r' && screen == paused){
         screen = game_play;
+        
+    }
+    
+    if (screen == game_over && key == 'n'){
+        startGame();
     }
     
     glutPostRedisplay();
@@ -659,7 +749,7 @@ void cursor(int x, int y) {
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
 // state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP &&screen == menu) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && screen == menu) {
         screen = game_play;
         level_change = 1;
     }

@@ -46,7 +46,6 @@ void Ship::regenerate(){
     direction.set_y(0);
     velocity.set_x(0);
     velocity.set_y(0);
-    numLives--;
 }
 void Ship::rotateR(){
     shape.rotate(ROTATION_FORCE);
@@ -158,6 +157,10 @@ void Ship::gunUpdate(){
 
 int Ship::getNumLives() const{
     return numLives;
+}
+
+void Ship::setNumLives(int nIn){
+    numLives = nIn;
 }
 
 void Ship::setShotDelay(int sIn){
