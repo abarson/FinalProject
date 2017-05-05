@@ -313,7 +313,7 @@ public:
      * Modifies: instance fields
      * Effects: set instance fields to default values
      */
-    Powerup();
+    Powerup(color c);
     /**
      * Requires: nothing
      * Modifies: powerup

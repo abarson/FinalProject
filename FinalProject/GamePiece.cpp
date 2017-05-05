@@ -368,9 +368,11 @@ bool Asteroid::detectCollision(Ship &sIn) const{
         return false;
     }
 }
-Powerup::Powerup(): GamePiece(){
+Powerup::Powerup(color c): GamePiece(){
     shape = Circle_Coord();
     initFields();
+    shape.set_outside_color(1, 1, 1);
+    shape.set_color(c.red, c.green, c.blue);
 }
 
 void Powerup::initFields(){
@@ -379,8 +381,6 @@ void Powerup::initFields(){
     setVelocity(r_velocity);
     shape.set_radius(r_size);
     
-    shape.set_color(0, 0, 1);
-    shape.set_outside_color(1, 1, 1);
     int c = rand() % 4;
     int x;
     int y;
