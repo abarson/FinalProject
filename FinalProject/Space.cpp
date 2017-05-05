@@ -106,6 +106,7 @@ void display_menu() {
     
 }
 
+
 void display_paused(){
     string pause_message = "Paused";
     glColor3f(1, 1, 1);
@@ -115,6 +116,12 @@ void display_paused(){
     }
     
     string resume_message = "'r' to resume";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(220, 300);
+    for (int i = 0; i < resume_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, resume_message[i]);
+    }
+    string save_message = "'s' to save";
     glColor3f(1, 1, 1);
     glRasterPos2i(220, 300);
     for (int i = 0; i < resume_message.length(); ++i) {
@@ -227,6 +234,9 @@ void add_life(){
             start_ast = 1;
         }
     }
+void savegame(){
+    
+}
 
 void explosion(Point2D loc, double size, type t){
     for (int i = 0; i < 20 + (int)size; ++i){
@@ -611,7 +621,7 @@ void play(){
         if (respawning){
             ship.setRespawning(ship.getRespawning() + 1);
             ship.blink();
-            if (ship.getRespawning() == 50){
+            if (ship.getRespawning() == 80){
                 ship.setRespawning(0);
                 respawning = false;
             }
@@ -691,6 +701,11 @@ void kbd(unsigned char key, int x, int y)
         screen = game_play;
         
     }
+    if (key == 's' && screen == paused){
+        savegame();
+        
+    }
+
     
     if (screen == game_over && key == 'n'){
         startGame();
