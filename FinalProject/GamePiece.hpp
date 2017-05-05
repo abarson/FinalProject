@@ -172,6 +172,8 @@ public:
     
     int getNumLives() const;
     
+    void setNumLives(int nIn);
+    
     /**
      * Requires: nothing
      * Modifies: shotDelay

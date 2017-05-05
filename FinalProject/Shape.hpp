@@ -96,6 +96,7 @@ public:
     Triangle_Coord();
     Triangle_Coord(Point2D tIn);
     Triangle_Coord(double tip_x, double tip_y);
+    Triangle_Coord(double tip_x, double tip_y, double rIn);
     Triangle_Coord(double tip_x, double tip_y, color c);
     
     Point2D get_center() const;
@@ -129,6 +130,7 @@ protected:
     Point2D bottom_right;
     Point2D bottom_left;
     double angle;
+    double size;
 private:
     virtual void calc_area_peri() override;
 };

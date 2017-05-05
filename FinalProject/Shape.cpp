@@ -118,14 +118,26 @@ bool operator == (Point2D &lhs, Point2D &rhs){
 }
 
 Triangle_Coord::Triangle_Coord(): Shape(){
-    set_center(Point2D(0, 0));
+    size = 10;
+    set_location(0, 0);
     angle = 0;
 }
 Triangle_Coord::Triangle_Coord(double center_x, double center_y): Shape(){
+    size = 10;
     set_location(center_x, center_y);
+    angle = 0;
 }
+
+Triangle_Coord::Triangle_Coord(double center_x, double center_y, double rIn): Shape(){
+    size = rIn;
+    set_location(center_x, center_y);
+    set_color(1, 1, 0);
+    angle = 0;
+}
+
 Triangle_Coord::Triangle_Coord(double center_x, double center_y, color c) : Shape(c){
-    set_center(Point2D(center_x, center_y));
+    size = 10;
+    set_location(center_x, center_y);
     angle = 0;
 }
 
@@ -174,9 +186,9 @@ void Triangle_Coord::calc_area_peri(){
 
 void Triangle_Coord::set_location(double center_x, double center_y){
     set_center(Point2D(center_x, center_y));
-    tip = Point2D(center_x, center_y - 10);
-    bottom_left = Point2D(center_x - 10, center_y + 20);
-    bottom_right = Point2D(center_x + 10, center_y + 20);
+    tip = Point2D(center_x, center_y - size);
+    bottom_left = Point2D(center_x - size, center_y + size + 10);
+    bottom_right = Point2D(center_x + size, center_y + size + 10);
     angle = 0;
 }
 

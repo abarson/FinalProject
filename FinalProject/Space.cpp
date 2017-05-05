@@ -32,6 +32,7 @@ Powerup PU2(color{0, 1, 0});
 
 screen_state screen;
 
+vector<Triangle_Coord>lives;
 
 int mouse_x, mouse_y = 0;
 
@@ -60,6 +61,8 @@ int level;
 int destroyed;
 
 int score = 0;
+
+int gameOverWait = 0;
 
 //winmm.lib
 //conio.h
@@ -168,11 +171,21 @@ void display_score(){
     for (int j = 0; j < score_message1.length(); j++){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message1[j]);
     }
-    
-    
-    
 }
 
+void display_lives(){
+    for (int i = 0; i < lives.size(); ++i){
+        lives[i].draw();
+    }
+}
+
+void remove_life(){
+    lives.erase(lives.begin() + lives.size() - 1);
+}
+
+void add_life(){
+    lives.push_back(Triangle_Coord(lives.size() * 20 + 110, 5, 5));
+}
 
 
     void start(){
@@ -227,7 +240,7 @@ void collisions(){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
             if (i > asteroids.size() || i < 0){
-                cout << "uh oh" << endl;
+                cout << "uh oh " << i << endl;
                 break;
             }
             if (asteroids[i].detectCollision(clip[j])){
@@ -243,17 +256,17 @@ void collisions(){
         }
     }
     }
-    if (!respawning){
+    if (!respawning && screen != game_over){
         for (int i = 0; i < asteroids.size(); ++i){
             if (asteroids[i].detectCollision(ship)){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
+                ship.setNumLives(ship.getNumLives()-1);
                 if (ship.getNumLives() == 0){
                     screen = game_over;
-                    score = 0;
-                    level = 1;
                 }
+                remove_life();
                 cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
@@ -273,7 +286,8 @@ void collisions(){
         if (PU2.detectCollision(ship)){
             explosion(PU2.getLocation(), PU2.getCircle().get_radius(), POWERUP);
             power_up2 = false;
-            cout << "HOLY MOLY" << endl;
+            add_life();
+            ship.setNumLives(ship.getNumLives() + 1);
         }
    
     }}
@@ -375,41 +389,64 @@ void generateBullet(){
 }
 
 void animation(){
-    ship.drawShape();
-    drawAllAsteroids();
-    display_score();
-    display_level(20,20);
-    for (int i = 0; i < thrustFire.size(); ++i){
-        thrustFire[i].draw();
+    if (gameOverWait < 100){
+        if (screen != game_over){
+            ship.drawShape();
+        }
+        display_lives();
+        drawAllAsteroids();
+        display_score();
+        display_level(20,20);
+        for (int i = 0; i < thrustFire.size(); ++i){
+            thrustFire[i].draw();
+        }
+    
+        for (int i = 0; i < explosionFire.size(); ++i){
+            explosionFire[i].draw();
+        }
+        drawBullets();
+        if (power_up1){
+            PU1.drawShape();
+        }
+        if (power_up2){
+            PU2.drawShape();
+        }
+    
+        if (level_change!=0){
+            display_level(200, 300);
+        }
+    }
+}
+
+void startGame(){
+    asteroids.clear();
+    clip.clear();
+    score = 0;
+    destroyed = 0;
+    gameOverWait = 0;
+    screen = menu;
+    ship.regenerate();
+    ship.setNumLives(3);
+    respawning = true;
+    level = 1;
+    
+    for (int i = 0; i < ship.getNumLives(); ++i){
+        add_life();
     }
     
-    for (int i = 0; i < explosionFire.size(); ++i){
-        explosionFire[i].draw();
-    }
-    drawBullets();
-    if (power_up1){
-        PU1.drawShape();
-    }
-    if (power_up2){
-        PU2.drawShape();
-    }
-    
-    if (level_change!=0){
-        display_level(200, 300);
-    }
+    power_up1 = false;
+    power_up2 = false;
+    cout << "Number of asteroids to start:" << start_ast << endl;
 }
 
 void init() {
    // test();
     //start();
-    level = 1;
-    destroyed = 0;
-    screen = menu;
-    cout << "Number of asteroids to start:" << start_ast << endl;
+    ship = Ship();
+    startGame();
     screen_width = 600;
     screen_height = 600;
-    ship = Ship();
-    respawning = true;
+    
 }
 
 
@@ -517,7 +554,7 @@ void levelHandler(int l){
 
 void play(){
     
-    if (screen == game_play){
+    if (screen == game_play || (screen == game_over && gameOverWait < 100)){
         if (keys[GLUT_KEY_LEFT]){
             ship.rotateL();
         }
@@ -525,8 +562,11 @@ void play(){
             ship.rotateR();
         }
         if (keys[GLUT_KEY_UP]){
-            ship.move();
-            spawnThrustFire();
+            if (screen != game_over){
+                ship.move();
+                spawnThrustFire();
+            }
+            
         }
         if (keys[32]){
             generateBullet();
@@ -580,10 +620,16 @@ void display() {
             display_menu();
             break;
         case game_play:
+            
             //play();
             break;
         case game_over:
-            display_game_over();
+            if (gameOverWait > 100){
+                display_game_over();
+            } else {
+                gameOverWait++;
+            }
+            
             break;
         case paused:
             display_paused();
@@ -623,7 +669,7 @@ void kbd(unsigned char key, int x, int y)
     }
     
     if (screen == game_over && key == 'n'){
-        screen = menu;
+        startGame();
     }
     
     glutPostRedisplay();
