@@ -321,6 +321,8 @@ public:
      */
     void initFields();
     
+    Circle_Coord getCircle() const;
+    
     virtual void drawShape() override;
     
     virtual Point2D getLocation() const override;

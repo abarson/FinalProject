@@ -380,16 +380,13 @@ void Powerup::initFields(){
     shape.set_radius(r_size);
     
     shape.set_color(0, 0, 1);
+    shape.set_outside_color(1, 1, 1);
     int c = rand() % 4;
     int x;
     int y;
     
     
-    shape.set_center(x,y);
-    
-    //set the target to be the opposite side of the screen of the Powerup
-    
-    //there are four different cases for spawning the Asteroid, one for each side of the screen
+    //there are four different cases for spawning the powerup, one for each side of the screen
     switch(c){
         case(0):
             x = 600;
@@ -428,6 +425,9 @@ void Powerup::drawShape(){
 
 Point2D Powerup::getLocation() const{
     return shape.get_center();
+}
+Circle_Coord Powerup::getCircle() const{
+    return shape;
 }
 
 void Powerup::move(){

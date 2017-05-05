@@ -13,6 +13,7 @@
 //#include <irrklang/irrKlang.h>
 
 enum screen_state {menu, game_play, paused, game_over};
+enum type {SHIP, ASTEROID,POWERUP};
 
 GLdouble screen_width, screen_height;
 
@@ -42,7 +43,7 @@ bool respawning = false;
 
 ofstream write_discovered;
 
-enum type {SHIP, ASTEROID};
+
 
 int counter = 0;
 int level;
@@ -107,6 +108,22 @@ void display_paused(){
     }
 }
 
+void display_game_over(){
+    string game_over_message = "GAME OVER";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(250, 250);
+    for (int i = 0; i < game_over_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game_over_message[i]);
+    }
+    
+    string new_game_message = "Click anywhere for a new game";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(220, 300);
+    for (int i = 0; i < new_game_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
+    }
+}
+
     void start(){
         ifstream in_file("save_state.txt");
         if (in_file){
@@ -140,7 +157,11 @@ void explosion(Point2D loc, double size, type t){
         if (t == SHIP){
             c.set_outside_color(1, 1, 0);
             c.set_color(1, 1, 0);
-        } else {
+        }else if (t==POWERUP){
+            c.set_outside_color(0.0/255, 100.0/255, 255.0/255);
+            c.set_color(1,1,1);
+        }
+        else {
             c.set_outside_color(100.0/255, 100.0/255, 100.0/255);
             c.set_color(150.0/255, 150.0/255, 150.0/255);
         }
@@ -179,6 +200,7 @@ void collisions(){
         }
     }
     if (PU.detectCollision(ship)){
+        explosion(PU.getLocation(), PU.getCircle().get_radius(), POWERUP);
         
     }
 }
@@ -353,6 +375,7 @@ void play(){
         collisions();
         moveBullets();
         PU.move();
+        levelHandler(level);
         ship.update();
         levelHandler(level);
         if (respawning){
