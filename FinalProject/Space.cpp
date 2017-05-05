@@ -27,6 +27,7 @@ vector<Circle_Coord> explosionFire;
 
 Ship ship;
 vector<Bullet> clip;
+vector<Bullet> magazine;
 Powerup PU;
 
 screen_state screen;
@@ -42,6 +43,8 @@ bool keys[256];
 bool respawning = false;
 
 bool power_up = true;
+bool magazinetime = false;
+
 
 ofstream write_discovered;
 
@@ -202,9 +205,15 @@ void collisions(){
             }
         }
     }
-    if (PU.detectCollision(ship)){
-        explosion(PU.getLocation(), PU.getCircle().get_radius(), POWERUP);
-        power_up = false;
+    if(power_up){
+        if (PU.detectCollision(ship)){
+            explosion(PU.getLocation(), PU.getCircle().get_radius(), POWERUP);
+            power_up = false;
+            magazinetime = true;
+        }
+        
+
+        
         
     }
 }
@@ -289,12 +298,34 @@ void moveBullets(){
         }
     }
 }
+void moveMagainze(){
+    for(int i=0; i<magazine.size();++i){
+        magazine[i].move();
+        if (magazine[i].getLifeTime() > 50){
+            magazine.erase(magazine.begin() + i);
+            i--;
+        }
+    }
+}
+void drawMagazine(){
+    for(int i=0; i<magazine.size();++i){
+        magazine[i].drawShape();
+    }
+}
+
+
 
 void generateBullet(){
     if (!respawning){
         if (ship.getShotDelay() == 0){
-            clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
-            ship.shoot();
+            if (!magazinetime){
+                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x(), ship.getLocation().get_y())));
+                ship.shoot();
+            } else {
+                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() + cos(ship.getDirection().get_x()) * 15, ship.getLocation().get_y() + ship.getDirection().get_y()  )));
+                clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() - cos(ship.getDirection().get_x()) * 15, ship.getLocation().get_y() + ship.getDirection().get_y())));
+                ship.shoot();
+            }
         }
     }
 }
@@ -313,6 +344,9 @@ void animation(){
     drawBullets();
     if (power_up){
         PU.drawShape();
+    }
+    if (magazinetime){
+        drawMagazine();
     }
 }
 
@@ -405,6 +439,7 @@ void play(){
         reduceFire();
         collisions();
         moveBullets();
+        moveMagainze();
         PU.move();
         ship.update();
         levelHandler(level);

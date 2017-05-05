@@ -32,6 +32,9 @@
 void spawnThrustFire();
 void drawBullets();
 void moveBullets();
+void moveMagainze();
+void drawMagazine();
+
 
 
 /**
