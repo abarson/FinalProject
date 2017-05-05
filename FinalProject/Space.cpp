@@ -63,6 +63,14 @@ int score = 0;
 
 int gameOverWait = 0;
 
+int rand_x = rand() % 600 + 1;
+int rand_y = rand() % 600 + 1;
+
+vector<int> stars_x;
+vector<int> stars_y;
+
+
+
 //winmm.lib
 //conio.h
 
@@ -188,14 +196,26 @@ void display_lives(){
 }
 
 void display_stars(){
-    int rand_x = rand() % 600 + 1;
-    int rand_y = rand() % 600 + 1;
+    
     string star = ".";
     glColor3f(1, 1, 1);
-    glRasterPos2i(rand_x, rand_y);
-    for(int i = 0; i < star.length(); ++i){
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, star[i]);
+    for(int s = 0; s < stars_x.size(); s++){
+        glRasterPos2i(stars_x[s], stars_y[s]);
+        for(int i = 0; i < star.length(); ++i){
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, star[i]);
+        }
+    
     }
+}
+
+void star_coords(){
+    for (int i = 0; i < 100; i++){
+        stars_x.push_back(rand() % 600 + 1);
+        stars_y.push_back(rand() % 600 + 1);
+    }
+}
+
+void display_all_stars(int x, int y){
     
 }
 
@@ -415,10 +435,10 @@ void generateBullet(){
     }
 }
 
+
+
 void animation(){
-    for (int s = 0; s < 100; ++s){
-        display_stars();
-    }
+    display_stars();
     if (gameOverWait < 100){
         if (screen != game_over){
             ship.drawShape();
@@ -477,7 +497,7 @@ void init() {
     startGame();
     screen_width = 600;
     screen_height = 600;
-    
+    star_coords();
 }
 
 
