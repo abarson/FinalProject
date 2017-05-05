@@ -441,6 +441,7 @@ void animation(){
         if (level_change!=0){
             display_level(200, 300);
         }
+        
     }
 }
 
