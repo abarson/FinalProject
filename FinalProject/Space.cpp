@@ -596,7 +596,7 @@ void play(){
         if (respawning){
             ship.setRespawning(ship.getRespawning() + 1);
             ship.blink();
-            if (ship.getRespawning() == 50){
+            if (ship.getRespawning() == 80){
                 ship.setRespawning(0);
                 respawning = false;
             }
