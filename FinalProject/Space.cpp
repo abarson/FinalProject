@@ -224,24 +224,12 @@ void explosion(Point2D loc, double size, type t){
 
 void collisions(){
     if (asteroids.size() > 0 && clip.size() > 0){
-        for (int i = 0; i < asteroids.size(); ++i){
-            for (int j = 0; j < clip.size(); ++j){
-                if (asteroids.size() > 0){
-                    if (i > asteroids.size() || i < 0){
-                        break;
-                    }
-                    if (asteroids[i].detectCollision(clip[j])){
-                        explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
-                        asteroids.erase(asteroids.begin() + i);
-                        clip.erase(clip.begin() + j);
-                        i--;
-                        j--;
-                        destroyed++;
-                        cout << "Destroyed " << destroyed << endl;
-                    }
-                }
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
+            if (i > asteroids.size() || i < 0){
+                cout << "uh oh" << endl;
+                break;
+            }
             if (asteroids[i].detectCollision(clip[j])){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 asteroids.erase(asteroids.begin() + i);
@@ -253,6 +241,7 @@ void collisions(){
                 score += 100;
             }
         }
+    }
     }
     if (!respawning){
         for (int i = 0; i < asteroids.size(); ++i){
@@ -286,10 +275,8 @@ void collisions(){
             power_up2 = false;
             cout << "HOLY MOLY" << endl;
         }
-    }
-}
-
-
+   
+    }}
 void spawnThrustFire(){
     Circle_Coord c1(2);
     c1.set_center(Point2D(ship.getLocation().get_x() - ship.getDirection().get_x() * 40 - rand() % 8 + 1, ship.getLocation().get_y() -ship.getDirection().get_y() * 40));
