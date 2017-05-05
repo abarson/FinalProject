@@ -428,7 +428,7 @@ void startGame(){
     gameOverWait = 0;
     screen = menu;
     ship.regenerate();
-    ship.setNumLives(10);
+    ship.setNumLives(3);
     respawning = true;
     level = 1;
     
