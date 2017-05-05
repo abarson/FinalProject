@@ -416,7 +416,7 @@ void animation(){
 
 void init() {
    // test();
-    start();
+    //start();
     level = 1;
     destroyed = 0;
     screen = menu;
@@ -612,6 +612,7 @@ void kbd(unsigned char key, int x, int y)
     
     if (key == 'r' && screen == paused){
         screen = game_play;
+        
     }
     
     if (screen == game_over && key == 'n'){
@@ -688,7 +689,7 @@ void cursor(int x, int y) {
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
 // state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP &&screen == menu) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && screen == menu) {
         screen = game_play;
         level_change = 1;
     }
