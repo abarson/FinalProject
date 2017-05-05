@@ -28,8 +28,8 @@ vector<Circle_Coord> explosionFire;
 Ship ship;
 vector<Bullet> clip;
 vector<Bullet> magazine;
-Powerup PU1(color{0, 1, 0});
-//Powerup PU2(color{0, 1, 0});
+Powerup PU1(color{0, 0, 1});
+Powerup PU2(color{0, 1, 0});
 
 screen_state screen;
 
@@ -43,7 +43,7 @@ bool keys[256];
 
 bool respawning = false;
 
-bool power_up1 = true;
+bool power_up1 = false;
 
 bool power_up2 = false;
 
@@ -235,10 +235,13 @@ void collisions(){
             power_up1 = false;
             magazinetime = true;
         }
-        
-
-        
-        
+    }
+    if (power_up2){
+        if (PU2.detectCollision(ship)){
+            explosion(PU2.getLocation(), PU2.getCircle().get_radius(), POWERUP);
+            power_up2 = false;
+            cout << "HOLY MOLY" << endl;
+        }
     }
 }
 
@@ -369,6 +372,9 @@ void animation(){
     if (power_up1){
         PU1.drawShape();
     }
+    if (power_up2){
+        PU2.drawShape();
+    }
     if (magazinetime){
         drawMagazine();
     }
@@ -441,7 +447,7 @@ void levelHandler(int l){
                 }
                 if (destroyed == 20){
                     level++;
-                    power_up1 = true;
+                    power_up2 = true;
                     level_change = 1;
                     destroyed = 0;
                     counter = 0;
@@ -494,9 +500,11 @@ void play(){
         moveMagainze();
         
         if (power_up1){
-        PU1.move();
+            PU1.move();
         }
-        
+        if (power_up2){
+            PU2.move();
+        }
         ship.update();
         levelHandler(level);
         if (respawning){
