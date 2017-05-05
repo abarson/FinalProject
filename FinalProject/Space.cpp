@@ -375,7 +375,6 @@ void play(){
         collisions();
         moveBullets();
         PU.move();
-        levelHandler(level);
         ship.update();
         levelHandler(level);
         if (respawning){
