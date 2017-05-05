@@ -175,7 +175,9 @@ void display_score(){
 
 void display_lives(){
     for (int i = 0; i < lives.size(); ++i){
-        lives[i].draw();
+        if (lives.size() > 0){
+            lives[i].draw();
+        }
     }
 }
 
@@ -258,7 +260,7 @@ void collisions(){
     }
     if (!respawning && screen != game_over){
         for (int i = 0; i < asteroids.size(); ++i){
-            if (asteroids[i].detectCollision(ship)){
+            if (asteroids[i].detectCollision(ship) && !respawning){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
@@ -426,7 +428,7 @@ void startGame(){
     gameOverWait = 0;
     screen = menu;
     ship.regenerate();
-    ship.setNumLives(3);
+    ship.setNumLives(10);
     respawning = true;
     level = 1;
     
