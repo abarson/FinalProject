@@ -33,7 +33,6 @@ screen_state screen;
 
 int mouse_x, mouse_y = 0;
 
-int counter = 0;
 
 int start_ast;
 
@@ -45,7 +44,9 @@ ofstream write_discovered;
 
 enum type {SHIP, ASTEROID};
 
+int counter = 0;
 int level;
+int destroyed;
 
 //winmm.lib
 //conio.h
@@ -158,6 +159,8 @@ void collisions(){
                 clip.erase(clip.begin() + j);
                 i--;
                 j--;
+                destroyed++;
+                cout << "Destroyed " << destroyed << endl;
             }
         }
         
@@ -168,7 +171,7 @@ void collisions(){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
-                cout << ship.getNumLives() << endl;
+                cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
                 i--;
@@ -289,12 +292,13 @@ void init() {
    // test();
     start();
     level = 1;
+    destroyed = 0;
     screen = menu;
     cout << "Number of asteroids to start:" << start_ast << endl;
     screen_width = 600;
     screen_height = 600;
     ship = Ship();
-    for (int i = 0; i < start_ast; ++i){
+    for (int i = 0; i < 3; ++i){
         asteroids.push_back(Asteroid());
         
     }
@@ -313,10 +317,17 @@ void levelHandler(int l){
     counter++;
     switch(l){
         case(1):
-            if (counter % 100 == 0 && asteroids.size() < 5){
+            if (counter % 100 == 0 && asteroids.size() < 5 && 8 - destroyed > 0){
                 asteroids.push_back(Asteroid());
             }
-            break;
+            if (destroyed == 8){
+                for (int i = 0; i < 5; ++i){
+                    asteroids.push_back(Asteroid());
+                }
+                level++;
+            }
+        break;
+            
     }
     
 }
@@ -342,10 +353,8 @@ void play(){
         collisions();
         moveBullets();
         PU.move();
-        levelHandler(level);
-        counter++;
         ship.update();
-        
+        levelHandler(level);
         if (respawning){
             ship.setRespawning(ship.getRespawning() + 1);
             ship.blink();
