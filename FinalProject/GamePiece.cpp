@@ -385,11 +385,7 @@ void Powerup::initFields(){
     int y;
     
     
-    shape.set_center(x,y);
-    
-    //set the target to be the opposite side of the screen of the Powerup
-    
-    //there are four different cases for spawning the Asteroid, one for each side of the screen
+    //there are four different cases for spawning the powerup, one for each side of the screen
     switch(c){
         case(0):
             x = 600;
