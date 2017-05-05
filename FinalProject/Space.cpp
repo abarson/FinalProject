@@ -137,30 +137,44 @@ void display_game_over(){
     }
 }
 
-void display_level(){
-    string new_game_message = "";
-    if (level == 1){
-        new_game_message = "Level 1";
-    } else if (level == 2){
-        new_game_message = "Level 2";
-    } else if (level == 3){
-        new_game_message = "Level 3";
-    } else if (level == 4){
-        new_game_message = "Level 4";
-    }
+void display_level(int x, int y){
+    char buffer[10]={'\0'};
+    sprintf(buffer, "%d", level);
+    string level_message = "Level: ";
     glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
-    for (int i = 0; i < new_game_message.length(); ++i) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
+    glRasterPos2i(x, y);
+    for (int i = 0; i < level_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, level_message[i]);
+    }
+    string level_message1 = buffer;
+    glColor3f(1, 1, 1);
+    glRasterPos2i(x + 65, y);
+    for (int j = 0; j < level_message1.length(); ++j){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, level_message1[j]);
     }
 }
 
 void display_score(){
+    char buffer[10]={'\0'};
+    sprintf(buffer, "%d", score);
     string score_message = "Score: ";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(460, 20);
+    for (int i = 0; i < score_message.length(); i++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message[i]);
+    }
+    string score_message1 = buffer;
+    glColor3f(1,1,1);
+    glRasterPos2i(525, 22);
+    for (int j = 0; j < score_message1.length(); j++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message1[j]);
+    }
     
     
     
 }
+
+
 
     void start(){
         ifstream in_file("save_state.txt");
@@ -220,6 +234,7 @@ void collisions(){
                 j--;
                 destroyed++;
                 cout << "Destroyed " << destroyed << endl;
+                score += 100;
             }
         }
         
@@ -232,6 +247,8 @@ void collisions(){
                 ship.regenerate();
                 if (ship.getNumLives() == 0){
                     screen = game_over;
+                    score = 0;
+                    level = 1;
                 }
                 cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
@@ -372,7 +389,8 @@ void generateBullet(){
 void animation(){
     ship.drawShape();
     drawAllAsteroids();
-    
+    display_score();
+    display_level(20,20);
     for (int i = 0; i < thrustFire.size(); ++i){
         thrustFire[i].draw();
     }
@@ -392,7 +410,7 @@ void animation(){
     }
     
     if (level_change!=0){
-        display_level();
+        display_level(200, 300);
     }
 }
 
