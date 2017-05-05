@@ -46,6 +46,7 @@ bool power_up = true;
 ofstream write_discovered;
 
 
+int level_change;
 
 int counter = 0;
 int level;
@@ -319,6 +320,7 @@ void init() {
    // test();
     start();
     level = 1;
+    level_change = 1;
     destroyed = 0;
     screen = menu;
     cout << "Number of asteroids to start:" << start_ast << endl;
@@ -341,20 +343,44 @@ void initGL() {
 }
 
 void levelHandler(int l){
-    counter++;
-    switch(l){
-        case(1):
-            if (counter % 100 == 0 && asteroids.size() < 5 && 8 - destroyed > 0){
-                asteroids.push_back(Asteroid());
-            }
-            if (destroyed == 8){
-                for (int i = 0; i < 5; ++i){
+    if (level_change == 0){
+        counter++;
+        switch(l){
+            case(1):
+                if (counter % 100 == 0 && asteroids.size() < 5 && 8 - destroyed > 0){
                     asteroids.push_back(Asteroid());
                 }
-                level++;
+                if (destroyed == 8){
+                    level++;
+                    level_change = 1;
+                    destroyed = 0;
+                    counter = 0;
+                }
+                break;
+            case(2):
+                if (counter % 100 == 0 && asteroids.size() < 10 && 15 - destroyed > 0){
+                    asteroids.push_back(Asteroid());
+                    if (asteroids.size() < 10){
+                        asteroids.push_back(Asteroid());
+                    }
+                }
+                break;
+        }
+    } else {
+        level_change++;
+        if (level_change > 100){
+            level_change = 0;
+            if (level == 1){
+                for (int i = 0; i < 3; ++i){
+                    asteroids.push_back(Asteroid());
+                }
+            } else if (level == 2){
+                for (int i = 0; i < 4; ++i){
+                    asteroids.push_back(Asteroid());
+                }
             }
-        break;
             
+        }
     }
     
 }
