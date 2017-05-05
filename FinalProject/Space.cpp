@@ -27,7 +27,6 @@ vector<Circle_Coord> explosionFire;
 
 Ship ship;
 vector<Bullet> clip;
-vector<Bullet> magazine;
 Powerup PU1(color{0, 0, 1});
 Powerup PU2(color{0, 1, 0});
 
@@ -144,7 +143,9 @@ void display_level(){
     } else if (level == 3){
         new_game_message = "Level 3";
     } else if (level == 4){
-        new_game_message = "Level 4";
+        new_game_message = "Final level. Good luck.";
+    } else {
+        new_game_message = "GAME OVER! YOU DID IT";
     }
     glColor3f(1, 1, 1);
     glRasterPos2i(220, 300);
@@ -201,19 +202,25 @@ void explosion(Point2D loc, double size, type t){
 }
 
 void collisions(){
-    for (int i = 0; i < asteroids.size(); ++i){
-        for (int j = 0; j < clip.size(); ++j){
-            if (asteroids[i].detectCollision(clip[j])){
-                explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
-                asteroids.erase(asteroids.begin() + i);
-                clip.erase(clip.begin() + j);
-                i--;
-                j--;
-                destroyed++;
-                cout << "Destroyed " << destroyed << endl;
+    if (asteroids.size() > 0 && clip.size() > 0){
+        for (int i = 0; i < asteroids.size(); ++i){
+            for (int j = 0; j < clip.size(); ++j){
+                if (asteroids.size() > 0){
+                    if (i > asteroids.size() || i < 0){
+                        break;
+                    }
+                    if (asteroids[i].detectCollision(clip[j])){
+                        explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
+                        asteroids.erase(asteroids.begin() + i);
+                        clip.erase(clip.begin() + j);
+                        i--;
+                        j--;
+                        destroyed++;
+                        cout << "Destroyed " << destroyed << endl;
+                    }
+                }
             }
         }
-        
     }
     if (!respawning){
         for (int i = 0; i < asteroids.size(); ++i){
@@ -325,20 +332,6 @@ void moveBullets(){
         }
     }
 }
-void moveMagainze(){
-    for(int i=0; i<magazine.size();++i){
-        magazine[i].move();
-        if (magazine[i].getLifeTime() > 50){
-            magazine.erase(magazine.begin() + i);
-            i--;
-        }
-    }
-}
-void drawMagazine(){
-    for(int i=0; i<magazine.size();++i){
-        magazine[i].drawShape();
-    }
-}
 
 
 
@@ -374,9 +367,6 @@ void animation(){
     }
     if (power_up2){
         PU2.drawShape();
-    }
-    if (magazinetime){
-        drawMagazine();
     }
     
     if (level_change!=0){
@@ -453,6 +443,26 @@ void levelHandler(int l){
                     counter = 0;
                 }
                 break;
+            case(4):
+                if (counter % 30 == 0 && asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                    asteroids.push_back(Asteroid());
+                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                }
+                if (destroyed == 30){
+                    level++;
+                    level_change = 1;
+                    destroyed = 0;
+                    counter = 0;
+                }
+                break;
         }
     } else {
         level_change++;
@@ -470,8 +480,11 @@ void levelHandler(int l){
                 for (int i = 0; i < 5; ++i){
                     asteroids.push_back(Asteroid());
                 }
+            } else if (level == 4){
+                for (int i = 0; i < 6; ++i){
+                    asteroids.push_back(Asteroid());
+                }
             }
-            
         }
     }
     
@@ -497,7 +510,6 @@ void play(){
         reduceFire();
         collisions();
         moveBullets();
-        moveMagainze();
         
         if (power_up1){
             PU1.move();
