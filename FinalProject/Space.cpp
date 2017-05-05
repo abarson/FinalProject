@@ -59,6 +59,8 @@ int counter = 0;
 int level;
 int destroyed;
 
+int score = 0;
+
 //winmm.lib
 //conio.h
 
@@ -120,39 +122,58 @@ void display_paused(){
 
 void display_game_over(){
     string game_over_message = "GAME OVER";
-    glColor3f(1, 1, 1);
-    glRasterPos2i(250, 250);
+    glColor3f(1, 0, 0);
+    glRasterPos2i(230, 250);
     for (int i = 0; i < game_over_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game_over_message[i]);
     }
     
-    string new_game_message = "Click anywhere for a new game";
-    glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
+    string new_game_message = "'n' for new game";
+    glColor3f(1, 0, 0);
+    glRasterPos2i(210, 300);
     for (int i = 0; i < new_game_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
     }
 }
 
-void display_level(){
-    string new_game_message = "";
-    if (level == 1){
-        new_game_message = "Level 1";
-    } else if (level == 2){
-        new_game_message = "Level 2";
-    } else if (level == 3){
-        new_game_message = "Level 3";
-    } else if (level == 4){
-        new_game_message = "Final level. Good luck.";
-    } else {
-        new_game_message = "GAME OVER! YOU DID IT";
-    }
+void display_level(int x, int y){
+    char buffer[10]={'\0'};
+    sprintf(buffer, "%d", level);
+    string level_message = "Level: ";
     glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
-    for (int i = 0; i < new_game_message.length(); ++i) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
+    glRasterPos2i(x, y);
+    for (int i = 0; i < level_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, level_message[i]);
+    }
+    string level_message1 = buffer;
+    glColor3f(1, 1, 1);
+    glRasterPos2i(x + 65, y);
+    for (int j = 0; j < level_message1.length(); ++j){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, level_message1[j]);
     }
 }
+
+void display_score(){
+    char buffer[10]={'\0'};
+    sprintf(buffer, "%d", score);
+    string score_message = "Score: ";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(460, 20);
+    for (int i = 0; i < score_message.length(); i++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message[i]);
+    }
+    string score_message1 = buffer;
+    glColor3f(1,1,1);
+    glRasterPos2i(525, 22);
+    for (int j = 0; j < score_message1.length(); j++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, score_message1[j]);
+    }
+    
+    
+    
+}
+
+
 
     void start(){
         ifstream in_file("save_state.txt");
@@ -219,6 +240,17 @@ void collisions(){
                         cout << "Destroyed " << destroyed << endl;
                     }
                 }
+    for (int i = 0; i < asteroids.size(); ++i){
+        for (int j = 0; j < clip.size(); ++j){
+            if (asteroids[i].detectCollision(clip[j])){
+                explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
+                asteroids.erase(asteroids.begin() + i);
+                clip.erase(clip.begin() + j);
+                i--;
+                j--;
+                destroyed++;
+                cout << "Destroyed " << destroyed << endl;
+                score += 100;
             }
         }
     }
@@ -228,6 +260,11 @@ void collisions(){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
+                if (ship.getNumLives() == 0){
+                    screen = game_over;
+                    score = 0;
+                    level = 1;
+                }
                 cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
@@ -353,7 +390,8 @@ void generateBullet(){
 void animation(){
     ship.drawShape();
     drawAllAsteroids();
-    
+    display_score();
+    display_level(20,20);
     for (int i = 0; i < thrustFire.size(); ++i){
         thrustFire[i].draw();
     }
@@ -370,13 +408,13 @@ void animation(){
     }
     
     if (level_change!=0){
-        display_level();
+        display_level(200, 300);
     }
 }
 
 void init() {
    // test();
-    start();
+    //start();
     level = 1;
     destroyed = 0;
     screen = menu;
@@ -558,7 +596,7 @@ void display() {
             //play();
             break;
         case game_over:
-            //display_game_over();
+            display_game_over();
             break;
         case paused:
             display_paused();
@@ -594,6 +632,11 @@ void kbd(unsigned char key, int x, int y)
     
     if (key == 'r' && screen == paused){
         screen = game_play;
+        
+    }
+    
+    if (screen == game_over && key == 'n'){
+        screen = menu;
     }
     
     glutPostRedisplay();
@@ -666,7 +709,7 @@ void cursor(int x, int y) {
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
 // state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP &&screen == menu) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && screen == menu) {
         screen = game_play;
         level_change = 1;
     }
