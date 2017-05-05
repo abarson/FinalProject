@@ -28,7 +28,8 @@ vector<Circle_Coord> explosionFire;
 Ship ship;
 vector<Bullet> clip;
 vector<Bullet> magazine;
-Powerup PU;
+Powerup PU1(color{0, 1, 0});
+//Powerup PU2(color{0, 1, 0});
 
 screen_state screen;
 
@@ -42,7 +43,11 @@ bool keys[256];
 
 bool respawning = false;
 
-bool power_up = true;
+bool power_up1 = true;
+
+bool power_up2 = false;
+
+
 bool magazinetime = false;
 
 
@@ -136,8 +141,10 @@ void display_level(){
         new_game_message = "Level 1";
     } else if (level == 2){
         new_game_message = "Level 2";
-    } else {
+    } else if (level == 3){
         new_game_message = "Level 3";
+    } else if (level == 4){
+        new_game_message = "Level 4";
     }
     glColor3f(1, 1, 1);
     glRasterPos2i(220, 300);
@@ -204,7 +211,6 @@ void collisions(){
                 j--;
                 destroyed++;
                 cout << "Destroyed " << destroyed << endl;
-                magazinetime=false;
             }
         }
         
@@ -223,10 +229,10 @@ void collisions(){
             }
         }
     }
-    if(power_up){
-        if (PU.detectCollision(ship)){
-            explosion(PU.getLocation(), PU.getCircle().get_radius(), POWERUP);
-            power_up = false;
+    if(power_up1){
+        if (PU1.detectCollision(ship)){
+            explosion(PU1.getLocation(), PU1.getCircle().get_radius(), POWERUP);
+            power_up1 = false;
             magazinetime = true;
         }
         
@@ -360,8 +366,8 @@ void animation(){
         explosionFire[i].draw();
     }
     drawBullets();
-    if (power_up){
-        PU.drawShape();
+    if (power_up1){
+        PU1.drawShape();
     }
     if (magazinetime){
         drawMagazine();
@@ -404,6 +410,7 @@ void levelHandler(int l){
                 if (destroyed == 8){
                     level++;
                     level_change = 1;
+                    power_up1 = true;
                     destroyed = 0;
                     counter = 0;
                 }
@@ -414,6 +421,30 @@ void levelHandler(int l){
                     if (asteroids.size() < 10 && 15 - destroyed - asteroids.size() > 0){
                         asteroids.push_back(Asteroid());
                     }
+                }
+                if (destroyed == 15){
+                    level++;
+                    level_change = 1;
+                    destroyed = 0;
+                    counter = 0;
+                }
+                break;
+            case(3):
+                if (counter % 40 == 0 && asteroids.size() < 12 && 20 - destroyed - asteroids.size() > 0){
+                    asteroids.push_back(Asteroid());
+                    if (asteroids.size() < 12 && 20 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                    if (asteroids.size() < 12 && 20 - destroyed - asteroids.size() > 0){
+                        asteroids.push_back(Asteroid());
+                    }
+                }
+                if (destroyed == 20){
+                    level++;
+                    power_up1 = true;
+                    level_change = 1;
+                    destroyed = 0;
+                    counter = 0;
                 }
                 break;
         }
@@ -427,6 +458,10 @@ void levelHandler(int l){
                 }
             } else if (level == 2){
                 for (int i = 0; i < 4; ++i){
+                    asteroids.push_back(Asteroid());
+                }
+            } else if (level == 3){
+                for (int i = 0; i < 5; ++i){
                     asteroids.push_back(Asteroid());
                 }
             }
@@ -457,7 +492,11 @@ void play(){
         collisions();
         moveBullets();
         moveMagainze();
-        PU.move();
+        
+        if (power_up1){
+        PU1.move();
+        }
+        
         ship.update();
         levelHandler(level);
         if (respawning){
