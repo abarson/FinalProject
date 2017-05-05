@@ -326,7 +326,7 @@ void generateBullet(){
                 clip.push_back(Bullet(Point2D(ship.getDirection().get_x(),ship.getDirection().get_y()), Point2D(ship.getLocation().get_x() - cos(ship.getDirection().get_x()) * 15, ship.getLocation().get_y() + ship.getDirection().get_y())));
                 ship.shoot();
             }
-        }
+        } 
     }
 }
 
