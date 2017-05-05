@@ -41,6 +41,8 @@ bool keys[256];
 
 bool respawning = false;
 
+bool power_up = true;
+
 ofstream write_discovered;
 
 
@@ -201,6 +203,7 @@ void collisions(){
     }
     if (PU.detectCollision(ship)){
         explosion(PU.getLocation(), PU.getCircle().get_radius(), POWERUP);
+        power_up = false;
         
     }
 }
@@ -307,7 +310,9 @@ void animation(){
         explosionFire[i].draw();
     }
     drawBullets();
-    PU.drawShape();
+    if (power_up){
+        PU.drawShape();
+    }
 }
 
 void init() {
