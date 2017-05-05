@@ -63,9 +63,6 @@ int score = 0;
 
 int gameOverWait = 0;
 
-int rand_x = rand() % 600 + 1;
-int rand_y = rand() % 600 + 1;
-
 vector<int> stars_x;
 vector<int> stars_y;
 
@@ -209,14 +206,10 @@ void display_stars(){
 }
 
 void star_coords(){
-    for (int i = 0; i < 100; i++){
+    for (int i = 0; i < 300; i++){
         stars_x.push_back(rand() % 600 + 1);
         stars_y.push_back(rand() % 600 + 1);
     }
-}
-
-void display_all_stars(int x, int y){
-    
 }
 
 void remove_life(){
