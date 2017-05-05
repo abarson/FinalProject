@@ -13,6 +13,7 @@
 //#include <irrklang/irrKlang.h>
 
 enum screen_state {menu, game_play, paused, game_over};
+enum type {SHIP, ASTEROID,POWERUP};
 
 GLdouble screen_width, screen_height;
 
@@ -43,7 +44,7 @@ bool respawning = false;
 
 ofstream write_discovered;
 
-enum type {SHIP, ASTEROID};
+
 
 int level;
 
@@ -155,7 +156,11 @@ void explosion(Point2D loc, double size, type t){
         if (t == SHIP){
             c.set_outside_color(1, 1, 0);
             c.set_color(1, 1, 0);
-        } else {
+        }else if (t==POWERUP){
+            c.set_outside_color(0.0/255, 100.0/255, 255.0/255);
+            c.set_color(1,1,1);
+        }
+        else {
             c.set_outside_color(100.0/255, 100.0/255, 100.0/255);
             c.set_color(150.0/255, 150.0/255, 150.0/255);
         }
@@ -192,6 +197,7 @@ void collisions(){
         }
     }
     if (PU.detectCollision(ship)){
+        explosion(PU.getLocation(), PU.getCircle().get_radius(), POWERUP);
         
     }
 }

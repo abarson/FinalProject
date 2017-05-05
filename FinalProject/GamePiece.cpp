@@ -380,6 +380,7 @@ void Powerup::initFields(){
     shape.set_radius(r_size);
     
     shape.set_color(0, 0, 1);
+    shape.set_outside_color(1, 1, 1);
     int c = rand() % 4;
     int x;
     int y;
@@ -424,6 +425,9 @@ void Powerup::drawShape(){
 
 Point2D Powerup::getLocation() const{
     return shape.get_center();
+}
+Circle_Coord Powerup::getCircle() const{
+    return shape;
 }
 
 void Powerup::move(){
