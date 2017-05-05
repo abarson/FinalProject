@@ -131,9 +131,9 @@ void display_paused(){
     }
     string save_message = "'s' to save";
     glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
-    for (int i = 0; i < resume_message.length(); ++i) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, resume_message[i]);
+    glRasterPos2i(220, 200);
+    for (int i = 0; i < save_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, save_message[i]);
     }
 }
 
@@ -228,25 +228,25 @@ void add_life(){
 }
 
 
-    void start(){
-        ifstream in_file("save_state.txt");
-        if (in_file){
-            cout << "Would you like to load your previous game state? (y/n)" << endl;
-            string user_input;
-            while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
-                cin.clear();
-                string junk;
-                getline(cin, junk);
-                cout << "Enter a y/n. " << endl;
-            }
-            if (user_input == "y"){
-                in_file >> start_ast;
-                write_discovered.open("save_state.txt");
-            } else{
-                start_ast = 1;
-                write_discovered.open("save_state.txt");
-            }
-        } else {
+void start(){
+    ifstream in_file("save_state.txt");
+    if (in_file){
+        cout << "Would you like to load your previous game state? (y/n)" << endl;
+        string user_input;
+        while ((!(cin >> user_input) || (user_input != "y" && user_input != "n"))){
+            cin.clear();
+            string junk;
+            getline(cin, junk);
+            cout << "Enter a y/n. " << endl;
+        }
+        if (user_input == "y"){
+            in_file >> start_ast;
+            write_discovered.open("save_state.txt");
+        } else{
+            start_ast = 1;
+            write_discovered.open("save_state.txt");
+        }
+     }    else{
             write_discovered.open("save_state.txt");
             //write_discovered("save_state.txt");
             cout << "No save file found. Making one for you now... " << endl;
@@ -255,7 +255,10 @@ void add_life(){
         }
     }
 void savegame(){
-    
+    ofstream out_file;
+    out_file.open("save_state.txt");
+    out_file<<ship.getNumLives()<<level;
+    out_file.close();
 }
 
 void explosion(Point2D loc, double size, type t){
