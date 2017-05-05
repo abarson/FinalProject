@@ -32,7 +32,8 @@
 void spawnThrustFire();
 void drawBullets();
 void moveBullets();
-void savegame();
+void saveGame();
+void loadGame();
 
 
 /**

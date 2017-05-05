@@ -108,6 +108,12 @@ void display_menu() {
     for (int i = 0; i < asteroid_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, asteroid_message[i]);
     }
+    string load_message = "Press 'L' to load";
+    glColor3f(1, 1, 1);
+    glRasterPos2i(210, 450);
+    for (int i = 0; i < load_message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, load_message[i]);
+    }
     
 }
 
@@ -247,12 +253,30 @@ void start(){
             start_ast = 1;
         }
     }
-void savegame(){
+void saveGame(){
     ofstream out_file;
-    out_file.open("save.txt");
-    out_file<<ship.getNumLives()<<endl;\
+    out_file.open("lives.txt");
+    out_file<<ship.getNumLives()<<endl;
+    out_file.close();
+    out_file.open("levels.txt");
     out_file<<level<<endl;
     out_file.close();
+}
+void loadGame(){
+    int newNumLives;
+    int newNumLevel;
+    ifstream in_file;
+    in_file.open("lives.txt");
+    in_file >> newNumLives;
+    in_file.close();
+    in_file.open("levels.txt");
+    in_file >> newNumLevel;
+    in_file.close();
+    level = newNumLevel;
+    ship.setNumLives(newNumLives);
+
+
+    
 }
 
 void explosion(Point2D loc, double size, type t){
@@ -720,7 +744,11 @@ void kbd(unsigned char key, int x, int y)
         
     }
     if (screen == paused && key == 115){
-        savegame();
+        saveGame();
+    
+    }
+    if (screen == menu && key == 108){
+        loadGame();
         
     }
 
