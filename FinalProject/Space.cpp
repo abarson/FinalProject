@@ -42,7 +42,7 @@ bool keys[256];
 
 bool respawning = false;
 
-bool power_up = true;
+bool power_up = false;
 bool magazinetime = false;
 
 
@@ -52,6 +52,7 @@ ofstream write_discovered;
 int level_change;
 
 int counter = 0;
+int power_counter = 0;
 int level;
 int destroyed;
 
@@ -436,6 +437,14 @@ void play(){
         }
         if (keys[32]){
             generateBullet();
+        }
+        if (power_counter==1000){
+            power_up=true;
+            power_counter-=1000;
+        }
+        else{
+            power_counter++;
+
         }
         moveAllAsteroids();
         reduceFire();
