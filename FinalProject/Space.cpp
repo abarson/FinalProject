@@ -55,6 +55,8 @@ int counter = 0;
 int level;
 int destroyed;
 
+int score = 0;
+
 //winmm.lib
 //conio.h
 
@@ -116,15 +118,15 @@ void display_paused(){
 
 void display_game_over(){
     string game_over_message = "GAME OVER";
-    glColor3f(1, 1, 1);
-    glRasterPos2i(250, 250);
+    glColor3f(1, 0, 0);
+    glRasterPos2i(230, 250);
     for (int i = 0; i < game_over_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, game_over_message[i]);
     }
     
-    string new_game_message = "Click anywhere for a new game";
-    glColor3f(1, 1, 1);
-    glRasterPos2i(220, 300);
+    string new_game_message = "'n' for new game";
+    glColor3f(1, 0, 0);
+    glRasterPos2i(210, 300);
     for (int i = 0; i < new_game_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
     }
@@ -144,6 +146,13 @@ void display_level(){
     for (int i = 0; i < new_game_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, new_game_message[i]);
     }
+}
+
+void display_score(){
+    string score_message = "Score: ";
+    
+    
+    
 }
 
     void start(){
@@ -215,6 +224,9 @@ void collisions(){
                 explosion(asteroids[i].getLocation(), asteroids[i].getCircle().get_radius(), ASTEROID);
                 explosion(ship.getLocation(), 30, SHIP);
                 ship.regenerate();
+                if (ship.getNumLives() == 0){
+                    screen = game_over;
+                }
                 cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
@@ -499,7 +511,7 @@ void display() {
             //play();
             break;
         case game_over:
-            //display_game_over();
+            display_game_over();
             break;
         case paused:
             display_paused();
@@ -535,6 +547,10 @@ void kbd(unsigned char key, int x, int y)
     
     if (key == 'r' && screen == paused){
         screen = game_play;
+    }
+    
+    if (screen == game_over && key == 'n'){
+        screen = menu;
     }
     
     glutPostRedisplay();
