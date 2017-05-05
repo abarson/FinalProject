@@ -44,6 +44,8 @@ bool keys[256];
 bool respawning = false;
 
 bool power_up = false;
+bool power_up1 = false;
+bool power_up2 = false; 
 bool magazinetime = false;
 
 
