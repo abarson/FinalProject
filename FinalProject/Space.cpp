@@ -328,6 +328,7 @@ void collisions(){
                 i--;
                 j--;
                 destroyed++;
+                cout << destroyed << endl;
                 score += 100;
             }
         }
@@ -544,92 +545,35 @@ void initGL() {
 void levelHandler(int l){
     if (level_change == 0){
         counter++;
-        switch(l){
-            case(1):
-                if (counter % 80 == 0 && asteroids.size() < 5 && 8 - destroyed - asteroids.size() > 0){
-                    asteroids.push_back(Asteroid());
-                }
-                if (destroyed == 8){
-                    level++;
-                    level_change = 1;
-                    power_up1 = true;
-                    destroyed = 0;
-                    counter = 0;
-                }
-                break;
-            case(2):
-                if (counter % 50 == 0 && asteroids.size() < 10 && 15 - destroyed - asteroids.size() > 0){
-                    asteroids.push_back(Asteroid());
-                    if (asteroids.size() < 10 && 15 - destroyed - asteroids.size() > 0){
-                        asteroids.push_back(Asteroid());
-                    }
-                }
-                if (destroyed == 15){
-                    level++;
-                    level_change = 1;
-                    destroyed = 0;
-                    counter = 0;
-                }
-                break;
-            case(3):
-                if (counter % 40 == 0 && asteroids.size() < 12 && 20 - destroyed - asteroids.size() > 0){
-                    asteroids.push_back(Asteroid());
-                    if (asteroids.size() < 12 && 20 - destroyed - asteroids.size() > 0){
-                        asteroids.push_back(Asteroid());
-                    }
-                    if (asteroids.size() < 12 && 20 - destroyed - asteroids.size() > 0){
-                        asteroids.push_back(Asteroid());
-                    }
-                }
-                if (destroyed == 20){
-                    level++;
-                    power_up2 = true;
-                    level_change = 1;
-                    destroyed = 0;
-                    counter = 0;
-                }
-                break;
-            case(4):
-                if (counter % 30 == 0 && asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
-                    asteroids.push_back(Asteroid());
-                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
-                        asteroids.push_back(Asteroid());
-                    }
-                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
-                        asteroids.push_back(Asteroid());
-                    }
-                    if (asteroids.size() < 15 && 30 - destroyed - asteroids.size() > 0){
-                        asteroids.push_back(Asteroid());
-                    }
-                }
-                if (destroyed == 30){
-                    level++;
-                    level_change = 1;
-                    destroyed = 0;
-                    counter = 0;
-                }
-                break;
+        int levelTime = 80 / level + 20;
+        if (levelTime < 30){
+            levelTime = 30;
+        }
+        double levelAmount = 8 * level;
+        double cap = level;
+        if (cap > 8){
+            cap = 8;
+        }
+        while (counter % levelTime == 0 && asteroids.size() < cap && levelAmount - destroyed - asteroids.size() > 0){
+            asteroids.push_back(Asteroid());
+        }
+        if (destroyed == levelAmount){
+            level++;
+            level_change = 1;
+            destroyed = 0;
+            counter = 0;
+            if (level % 3 == 0){
+                power_up1 = true;
+            } else if (level % 4 == 0){
+                power_up2 = true;
+            }
         }
     } else {
         level_change++;
         if (level_change > 100){
             level_change = 0;
-            if (level == 1){
-                for (int i = 0; i < 3; ++i){
-                    asteroids.push_back(Asteroid());
-                }
-            } else if (level == 2){
-                for (int i = 0; i < 4; ++i){
-                    asteroids.push_back(Asteroid());
-                }
-            } else if (level == 3){
-                for (int i = 0; i < 5; ++i){
-                    asteroids.push_back(Asteroid());
-                }
-            } else if (level == 4){
-                for (int i = 0; i < 6; ++i){
-                    asteroids.push_back(Asteroid());
-                }
+            for (int i = 0; i < level + 2; ++i){
+                asteroids.push_back(Asteroid());
             }
         }
     }
@@ -767,8 +711,11 @@ void kbd(unsigned char key, int x, int y)
         if (can_load){
             ship.setNumLives(newNumLives);
             level = newNumLevel;
-            for (int i = 0; i < 3 - newNumLives; ++i){
+            for (int i = 0; i < 3; ++i){
                 remove_life();
+            }
+            for (int i = 0; i < newNumLives; ++i){
+                add_life();
             }
             screen = game_play;
             loaded = true;
