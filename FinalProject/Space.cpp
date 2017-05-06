@@ -36,6 +36,8 @@ vector<Triangle_Coord>lives;
 
 int mouse_x, mouse_y = 0;
 
+int newNumLives;
+int newNumLevel;
 
 int start_ast;
 
@@ -51,6 +53,8 @@ bool magazinetime = false;
 
 ofstream write_discovered;
 
+bool can_load = false;
+bool loaded = false;
 
 int level_change;
 
@@ -102,19 +106,20 @@ void display_menu() {
     for (int i = 0; i < message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
     }
-    string asteroid_message = "Welcome to Asteroid!";
+    string asteroid_message = "Welcome to Asteroids!";
     glColor3f(1,1,1);
     glRasterPos2i(180, 150);
     for (int i = 0; i < asteroid_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, asteroid_message[i]);
     }
+    if (can_load){
     string load_message = "Press 'L' to load";
     glColor3f(1, 1, 1);
     glRasterPos2i(210, 450);
     for (int i = 0; i < load_message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, load_message[i]);
     }
-    
+    }
 }
 
 
@@ -263,17 +268,27 @@ void saveGame(){
     out_file.close();
 }
 void loadGame(){
-    int newNumLives;
-    int newNumLevel;
-    ifstream in_file;
-    in_file.open("lives.txt");
-    in_file >> newNumLives;
+    newNumLives = -1;
+    newNumLevel = -1;
+    ifstream in_file("lives.txt");
+    if (in_file){
+        in_file >> newNumLives;
+        cout << newNumLives << endl;
+        can_load = true;
+    } else {
+        can_load = false;
+    }
     in_file.close();
-    in_file.open("levels.txt");
-    in_file >> newNumLevel;
+    
+    ifstream in_file2("levels.txt");
+    if (in_file2){
+        in_file2 >> newNumLevel;
+        cout << newNumLevel << endl;
+        can_load = true;
+    } else {
+        can_load = false;
+    }
     in_file.close();
-    level = newNumLevel;
-    ship.setNumLives(newNumLives);
 
 
     
@@ -304,7 +319,6 @@ void collisions(){
     for (int i = 0; i < asteroids.size(); ++i){
         for (int j = 0; j < clip.size(); ++j){
             if (i > asteroids.size() || i < 0){
-                cout << "uh oh " << i << endl;
                 break;
             }
             if (asteroids[i].detectCollision(clip[j])){
@@ -314,7 +328,6 @@ void collisions(){
                 i--;
                 j--;
                 destroyed++;
-                cout << "Destroyed " << destroyed << endl;
                 score += 100;
             }
         }
@@ -331,7 +344,6 @@ void collisions(){
                     screen = game_over;
                 }
                 remove_life();
-                cout << "Lives: " << ship.getNumLives() << endl;
                 respawning = true;
                 asteroids.erase(asteroids.begin() + i);
                 i--;
@@ -487,6 +499,8 @@ void animation(){
 }
 
 void startGame(){
+    
+    loadGame();
     asteroids.clear();
     clip.clear();
     score = 0;
@@ -495,8 +509,9 @@ void startGame(){
     screen = menu;
     ship.regenerate();
     ship.setNumLives(3);
-    respawning = true;
     level = 1;
+    respawning = true;
+    
     
     for (int i = 0; i < ship.getNumLives(); ++i){
         add_life();
@@ -508,6 +523,7 @@ void startGame(){
 }
 
 void init() {
+    
    // test();
     //start();
     ship = Ship();
@@ -748,7 +764,16 @@ void kbd(unsigned char key, int x, int y)
     
     }
     if (screen == menu && key == 108){
-        loadGame();
+        if (can_load){
+            ship.setNumLives(newNumLives);
+            level = newNumLevel;
+            for (int i = 0; i < 3 - newNumLives; ++i){
+                remove_life();
+            }
+            screen = game_play;
+            loaded = true;
+            level_change = 1;
+        } 
         
     }
 
